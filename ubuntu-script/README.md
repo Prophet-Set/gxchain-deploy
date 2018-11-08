@@ -74,7 +74,7 @@
 $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_server_init.sh
 ```
 
-#### 设置参数
+#### 修改脚本默认参数
 
 1. 设置新建的普通用户名，例如：
 
