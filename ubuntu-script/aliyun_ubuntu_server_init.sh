@@ -2,7 +2,7 @@
 #set -x
 echo "########################################################################"
 echo "# Ubuntu 16.04 4.4.0-117-generic init script"
-echo "# @author wangwei"
+echo "# @author https://wangwei.one"
 echo "# @date   20181108"
 echo "########################################################################"
 

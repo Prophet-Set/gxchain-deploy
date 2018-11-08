@@ -3,7 +3,7 @@
 #set -x
 echo "########################################################################"
 echo "# GXChain test node install script On Ubuntu 16.04 4.4.0-117-generic"
-echo "# @author wangwei"
+echo "# @author https://wangwei.one"
 echo "# @date   20181108"
 echo "########################################################################"
 
