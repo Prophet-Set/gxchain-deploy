@@ -137,8 +137,13 @@ $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_serv
    -----------END-----------
    ```
 
-6. 保存好密码。
+6. 保存好密码，用于后期登录：
 
+   ```shell
+   $ ssh -p 41837 gxchainuser@10.10.10.06
+   
+   enter password: BmY1Fm2prNT*lZWSmEYMzuI1rg8S*lSl
+   ```
 
 
 ### SSH Key登录配置
