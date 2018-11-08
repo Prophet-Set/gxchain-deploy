@@ -8,7 +8,7 @@
 
 > [gxchain_test_install.sh](https://github.com/gxcdac/gxchain-script/tree/master/gxchain-test-script/gxchain_test_install.sh)
 
-```shell
+```powershell
 $ wget https://github.com/gxcdac/gxchain-script/tree/master/gxchain-test-script/gxchain_test_install.sh
 ```
 
@@ -23,13 +23,13 @@ $ wget https://github.com/gxcdac/gxchain-script/tree/master/gxchain-test-script/
 
 ### 执行脚本
 
-```shell
+```powershell
 $ bash +x gxchain_test_install.sh
 ```
 
 查看日志 `testnet_node/logs/witness.log` 输出，等待区块同步完成
 
-```
+```tex
 
 ...
 
