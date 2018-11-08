@@ -150,17 +150,17 @@ $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_serv
 
 > 根据自己需要，这一步也可以省略
 
-一般我们登录生产机器，会通过跳板机去登录，我们需要在跳板机上生产SSH公私钥，用于登录生产机器
+一般我们登录生产机器，会通过跳板机去登录，我们需要在跳板机上生成SSH公私钥，用于登录生产机器
 
-1. 登录跳板机
+1. 登录跳板机。
 
-2. 生成ssh key。
+2. 生成ssh key，可以修改后面的备注remark。
 
    ```shell
-   $ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_aws_$(date +%Y-%m-%d) -C "AWS key for abc corp clients"
+   $ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_aws_$(date +%Y-%m-%d) -C "remark"
    ```
 
-3. 安装ssh public key。将上一步生成的ssh public key安装到指定的生产机上。
+3. 安装ssh public key，将上一步生成的ssh public key安装到指定的生产机上。
 
    > 替换`.pub`文件名、`user`和`remote-server-ip`
 
@@ -168,15 +168,15 @@ $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_serv
    $ ssh-copy-id -i id_rsa_aws_2015-03-04.pub user@remote-server-ip
    ```
 
-4. 使用新生成的ssh key 登录服务器，并再次优化sshd_config配置，关闭密码登录，强制pubkey登录
+4. 使用新生成的ssh key 登录生产机，并再次优化sshd_config配置，强制关闭密码登录，强制开启pubkey登录
 
-   1. 使用ssh key登录
+   1. 使用ssh key登录，例如：
 
       ```shell
       $ ssh -i ssh_private_file -p 41837 gxchainuser@101.71.23.9
       ```
 
-   2. 再次优化`sshd_config`配置，关闭密码登录，强制pubkey登录，单独执行下面的脚本。
+   2. 优化`sshd_config`配置，强制关闭密码登录，强制开启pubkey登录，单独执行下面的脚本：
 
       ```shell
       sshd_pwd_auth_tunning(){
@@ -195,7 +195,7 @@ $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_serv
 
 - 执行完毕，删除 `aliyun_ubuntu_server_init.sh` 脚本，避免重复执行。
 - 阿里云相关配置
-  - ECS安全组配置：配置ssh的登录规则
+  - ECS安全组配置，配置ssh的登录规则，ip白名单
   - 配置磁盘快照策略
   - 配置服务器快照策略
 
