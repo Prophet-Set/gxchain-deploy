@@ -46,7 +46,7 @@
 
   - `apt-get upgrade`
 
-  - 安装gxchain依赖包及常用的软件包
+  - 安装gxchain依赖包及常用的软件包，可根据自己的需求自行配置
 
     ```shell
     apt-get install -y ntp htop zsh git-core software-properties-common libstdc++-7-dev
