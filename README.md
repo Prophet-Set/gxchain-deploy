@@ -1,1 +1,2 @@
-# gxchain-script
+# 公信链部署相关脚本
+
