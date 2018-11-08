@@ -15,7 +15,7 @@ $ wget https://github.com/gxcdac/gxchain-script/tree/master/gxchain-test-script/
 ### 参数修改
 
 1. 根据自己的需要，在启动前修改 [gxchain_test_install.sh](https://github.com/gxcdac/gxchain-script/tree/master/gxchain-test-script/gxchain_test_install.sh) 中的启动参数：
-   - `WORKSPACE_PATH`：公信链运行的目录
+   - `WORKSPACE_PATH`：公信链运行目录
    - `RPC_ENDPOINT`：RPC监听的端口地址
    - `P2P_ENDPOINT`：P2P监听的端口地址
 
