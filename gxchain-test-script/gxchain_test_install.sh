@@ -8,7 +8,7 @@ echo "# @date   20181108"
 echo "########################################################################"
 
 # config startup parameters
-CMD_USER=gxcdac
+CMD_USER=gxchainuser
 WORKSPACE_PATH=/mydata
 GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
 DATA_DIR=$WORKSPACE_PATH/testnet_node
