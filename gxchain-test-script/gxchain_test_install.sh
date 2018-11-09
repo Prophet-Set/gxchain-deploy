@@ -1,11 +1,11 @@
 #!/bin/bash
 # https://docs.gxchain.org/zh/guide/testnet.html
 #set -x
-echo "########################################################################"
+echo "#--------------------------------------------------------------------"
 echo "# GXChain test node install script On Ubuntu 16.04 4.4.0-117-generic"
 echo "# @author https://wangwei.one"
 echo "# @date   20181108"
-echo "########################################################################"
+echo "#--------------------------------------------------------------------"
 
 # config startup parameters
 CMD_USER=gxchainuser

@@ -1,9 +1,9 @@
 #!/bin/bash
 # https://github.com/gxchain/gxb-core/wiki/for_exchanges_cn
-# 
+# ----------------------------------------------------------
 # GXChain witness node scirpt ! 
-#
-##
+# ----------------------------------------------------------
+#set -x
 
 # config startup parameters
 CMD_USER=gxcdac
