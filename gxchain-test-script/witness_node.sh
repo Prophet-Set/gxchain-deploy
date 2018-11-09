@@ -6,7 +6,7 @@
 #set -x
 
 # config startup parameters
-CMD_USER=gxcdac
+CMD_USER=gxchainuser
 WORKSPACE_PATH=/mydata
 DATA_DIR=$WORKSPACE_PATH/testnet_node
 PROGRAMS_DIR=$WORKSPACE_PATH/programs
