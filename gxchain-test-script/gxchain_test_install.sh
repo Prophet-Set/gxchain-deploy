@@ -8,6 +8,7 @@ echo "# @date   20181108"
 echo "########################################################################"
 
 # config startup parameters
+CMD_USER=gxcdac
 WORKSPACE_PATH=/mydata
 GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
 DATA_DIR=$WORKSPACE_PATH/testnet_node
@@ -38,8 +39,10 @@ wget http://gxb-package.oss-cn-hangzhou.aliyuncs.com/gxb-core/genesis/testnet-ge
 # start testnet node
 CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir=$DATA_DIR --rpc-endpoint=$RPC_ENDPOINT --p2p-endpoint=$P2P_ENDPOINT --seed-nodes=$SEED_NODES --genesis-json $GENESIS_FILE_PATH"
 
-setsid $CMD >/dev/null 2>&1 < /dev/null &
+echo "Starting GXChain witness node ... "
+/bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
 
 echo "Check block sync progress. Usage: tail -f $WORKSPACE_PATH/testnet_node/logs/witness.log"
+
 
 
