@@ -256,7 +256,7 @@ for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $
 必须要以root的权限进行运行
 
 ```shell
-#bash +x ubuntu_firewall.sh
+./ubuntu_firewall.sh
 ```
 
 
