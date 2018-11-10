@@ -1,18 +1,18 @@
-# Ubuntu优化配置脚本
+# 服务器优化配置
 
-### 背景
+## 背景
 
-一般，我们在买完云服务器之后，需要修改服务器默认的配置。例如，修改hostname、新增普通用户、修改ssh登录配置、更新安装包、磁盘挂载、swap分区配置等等一系列措施。这些操作费时费力，还容易出错，弄不好一天的时间就过去了。
+一般，我们在买完云服务器之后，需要修改服务器默认的配置。例如，修改hostname、新增普通用户、修改ssh登录配置、更新安装包、磁盘挂载、swap分区配置、防火墙设置、内核安全设置等等一系列措施。这些操作费时费力，还容易出错，弄不好一天的时间就过去了。
 
 通过此脚本，则可以分分钟准确地完成以上一系列配置。
 
-### 适用
+## 适用
 
 - 适用于 **阿里云** **新购**的 **Ubuntu 16.04 LTS** 服务器
 - 版本：`Ubuntu 16.04 4.4.0-117-generic`
 - 其他linux版本的请自行修改，大同小异，只是一些命令有些许区别
 
-### 功能
+## 功能
 
 该脚本对**新服务器**的处理，主要如下：
 
@@ -54,7 +54,7 @@
 
 - 系统配置优化
 
-  - 优化 `/etc/sysctl.conf`
+  - 内核安全优化 `/etc/sysctl.conf`
   - 设置 language 为 `en_US.UTF-8`
 
 - 磁盘分区处理
@@ -66,15 +66,17 @@
 
 
 
-### 步骤
+## 执行Ububtu初始化脚本
 
-#### 下载脚本
+### 下载脚本
+
+> [ubuntu_optimize](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh)
 
 ```shell
-$ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_server_init.sh
+$ wget https://raw.githubusercontent.com/gxcdac/gxchain-script/master/ubuntu-script/ubuntu_optimize.sh
 ```
 
-#### 修改脚本默认参数
+### 修改脚本默认参数
 
 1. 设置新建的普通用户名，例如：
 
@@ -112,7 +114,7 @@ $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_serv
 
 
 
-#### 执行脚本
+### 执行脚本
 
 1. 执行脚本
 
@@ -145,6 +147,9 @@ $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_serv
    enter password: BmY1Fm2prNT*lZWSmEYMzuI1rg8S*lSl
    ```
 
+
+
+## 安全
 
 ### SSH Key登录配置
 
@@ -191,11 +196,79 @@ $ wget https://github.com/gxcdac/gxchain-script/ubuntu-script/aliyun_ubuntu_serv
 
 
 
-### 收尾
+### 防火墙设置
 
-- 执行完毕，删除 `aliyun_ubuntu_server_init.sh` 脚本，避免重复执行。
-- 阿里云相关配置
-  - ECS安全组配置，配置ssh的登录规则，ip白名单
-  - 配置磁盘快照策略
-  - 配置服务器快照策略
+> **注意**：使用该脚本时，请务必认真检查要设置规则的IP与端口，避免服务器及应用功能异常！
+
+#### 下载脚本
+
+> [ubuntu_firewall](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_firewall.sh)
+
+```shell
+$ wget https://raw.githubusercontent.com/gxcdac/gxchain-script/master/ubuntu-script/ubuntu_firewall.sh
+```
+
+#### 配置 INPUT 规则
+
+找到 `ubuntu_firewall.sh` 中 `input_rules()`  方法中的下面这段内容，按照你的实际需求，对要开发的端口和IP进行配置
+
+```shell
+###### Add the input rules here:
+# iptables -A INPUT -p tcp -m state --state NEW -m tcp -s <source_address> --dport <destnation_port> -j ACCEPT
+###### Add an end
+
+# ssh 端口只对跳板机开放
+iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport 22 -j ACCEPT
+
+# 80、443 端口只对 SLB 开放
+iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport 443 -j ACCEPT
+  
+# allow your own app port
+iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport xxx -j ACCEPT
+
+```
+
+#### 配置 OUTPUT 规则
+
+找到 `ubuntu_firewall.sh` 中 `output_rules()`  方法中的下面这段内容，按照你的实际需求，对要开发的端口和IP进行配置
+
+```shell
+###### Add the output rules here:
+# iptables -A OUTPUT -p tcp -m state --state NEW -d <destnation_address> --dport <destnation_port> -j ACCEPT
+###### Add an end
+
+# allow DNS-NTP-FTP-HTTP-HTTPS-SMTP
+PORTS1="53 123 21 80 443 25"
+for port1 in $PORTS1;do iptables -A OUTPUT -p udp -m state --state NEW --dport $port1 -j ACCEPT;done
+
+# allow your custom SSH port
+PORTS2="22"
+for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port2 -j ACCEPT;done
+
+# allow your own app port
+PORTS2="22"
+for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port2 -j ACCEPT;done
+```
+
+#### 执行脚本
+
+必须要以root的权限进行运行
+
+```shell
+#bash +x ubuntu_firewall.sh
+```
+
+
+
+#### 阿里云安全组设置
+
+如果你用的是阿里云的ECS服务，我们还需要做一道防御，将上面配置的防火墙规则同步到ECS安全组配置中去。
+
+
+
+## 其他配置
+
+- 配置服务器快照策略
+- 配置磁盘快照策略
 
