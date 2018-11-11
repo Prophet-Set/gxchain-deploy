@@ -43,20 +43,30 @@ $ ./gxchain_test_script.sh install
 $ ./gxchain_test_script.sh sync_block
 ```
 
-查看区块同步日志 `testnet_node/logs/witness.log` ，等待区块同步完成，当 `Got block` 后面的编号，开始按照 1 递增时，表示区块已经同步完成，整个测试链的数据在1.5G左右。
+查看区块同步日志 `testnet_node/logs/witness.log` ，等待区块同步完成。
+
+当区块编号以  10000 递增时，表示区块正在同步。当区块编号以  1 递增时，表示区块同步完成，公信链整个测试链的数据约在1.5G左右。
 
 ```
 
+2018-11-11T12:58:54        th_a:?unnamed?       reset_p2p_node ] Adding seed node 106.14.180.117:6789			application.cpp:152
+2018-11-11T12:58:54        th_a:?unnamed?       reset_p2p_node ] Configured p2p node to listen on 0.0.0.0:8659			application.cpp:194
+2018-11-11T12:58:54        th_a:?unnamed? reset_websocket_serv ] Configured websocket rpc to listen on 0.0.0.0:38067			application.cpp:269
+2018-11-11T12:58:54        th_a:?unnamed?       plugin_startup ] data transaction plugin startup			data_transaction_plugin.cpp:63
+2018-11-11T12:58:54        th_a:?unnamed?       plugin_startup ] witness plugin:  plugin_startup() begin			witness.cpp:121
+2018-11-11T12:58:54        th_a:?unnamed?       plugin_startup ] No witnesses configured! Please add witness IDs and private keys to configuration.		witness.cpp:137
+2018-11-11T12:58:54        th_a:?unnamed?       plugin_startup ] witness plugin:  plugin_startup() end			witness.cpp:138
+2018-11-11T12:58:54        th_a:?unnamed?                 main ] Started witness node on a chain with 0 blocks.			main.cpp:216
+2018-11-11T12:58:54        th_a:?unnamed?                 main ] Chain ID is c2af30ef9340ff81fd61654295e98a1ff04b23189748f86727d0b26b40bb0ff4			main.cpp:217
+
 ...
 
-2018-11-10T05:47:27 th_a:invoke handle_block         handle_block ] Got block: #8749829 time: 2018-11-10T05:47:27 latency: 30 ms from: init7  irreversible: 8749808 (-21)			application.cpp:496
-2018-11-10T05:47:30 th_a:invoke handle_block         handle_block ] Got block: #8749830 time: 2018-11-10T05:47:30 latency: 37 ms from: miner6  irreversible: 8749809 (-21)			application.cpp:496
-2018-11-10T05:47:33 th_a:invoke handle_block         handle_block ] Got block: #8749831 time: 2018-11-10T05:47:33 latency: 30 ms from: miner9  irreversible: 8749815 (-16)			application.cpp:496
-2018-11-10T05:47:36 th_a:invoke handle_block         handle_block ] Got block: #8749832 time: 2018-11-10T05:47:36 latency: 35 ms from: init0  irreversible: 8749817 (-15)			application.cpp:496
-2018-11-10T05:47:39 th_a:invoke handle_block         handle_block ] Got block: #8749833 time: 2018-11-10T05:47:39 latency: 36 ms from: init3  irreversible: 8749818 (-15)			application.cpp:496
-2018-11-10T05:47:42 th_a:invoke handle_block         handle_block ] Got block: #8749834 time: 2018-11-10T05:47:42 latency: 36 ms from: init1  irreversible: 8749819 (-15)			application.cpp:496
-2018-11-10T05:47:45 th_a:invoke handle_block         handle_block ] Got block: #8749835 time: 2018-11-10T05:47:45 latency: 31 ms from: init2  irreversible: 8749820 (-15)			application.cpp:496
-2018-11-10T05:47:48 th_a:invoke handle_block         handle_block ] Got block: #8749836 time: 2018-11-10T05:47:48 latency: 31 ms from: bob  irreversible: 8749821 (-15)			application.cpp:496
+2018-11-11T13:02:14 th_a:invoke handle_block         handle_block ] Got block: #960000 time: 2018-01-17T18:44:30 latency: 25726664888 ms from: init3  irreversible: 959990 (-10)			application.cpp:496
+2018-11-11T13:02:16 th_a:invoke handle_block         handle_block ] Got block: #970000 time: 2018-01-18T03:12:09 latency: 25696207587 ms from: init2  irreversible: 969992 (-8)			application.cpp:496
+2018-11-11T13:02:18 th_a:invoke handle_block         handle_block ] Got block: #980000 time: 2018-01-18T11:39:39 latency: 25665759432 ms from: init10  irreversible: 979992 (-8)			application.cpp:496
+
+...
+
 2018-11-10T05:47:51 th_a:invoke handle_block         handle_block ] Got block: #8749837 time: 2018-11-10T05:47:51 latency: 33 ms from: init5  irreversible: 8749822 (-15)			application.cpp:496
 2018-11-10T05:47:54 th_a:invoke handle_block         handle_block ] Got block: #8749838 time: 2018-11-10T05:47:54 latency: 36 ms from: init6  irreversible: 8749823 (-15)			application.cpp:496
 2018-11-10T05:47:57 th_a:invoke handle_block         handle_block ] Got block: #8749839 time: 2018-11-10T05:47:57 latency: 30 ms from: miner8  irreversible: 8749824 (-15)			application.cpp:496

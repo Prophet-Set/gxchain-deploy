@@ -57,7 +57,7 @@ sync_block() {
 	return 0
 }
 
-generate_config(){
+gen_config(){
 	echo "Starting generate config.ini ... "
 	# backup config.ini
 	cp $DATA_DIR/config.ini $DATA_DIR/config.ini.bak
@@ -67,10 +67,13 @@ generate_config(){
 	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint='${RPC_ENDPOINT}'/g;" $DATA_DIR/config.ini
 
 	echo "Generate config.ini Finished ! "
+
+	return 0
 }
 
 witness_node_pid() {
     echo `ps aux | grep $PROGRAMS_DIR/witness_node/witness_node | grep -v grep | awk '{ print $2 }'`
+    return 0
 }
 
 start() {
@@ -118,6 +121,9 @@ install)
 sync_block)
   sync_block
 ;;
+gen_config)
+  gen_config
+;;  
 start)
   start
 ;;
