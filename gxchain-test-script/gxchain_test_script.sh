@@ -19,15 +19,7 @@ PROGRAMS_DIR=$WORKSPACE_PATH/programs
 
 install(){
 	echo "Starting GXChain install ... "
-
-	# update & install package
-	sudo apt-get install ntp
-	apt-get update
-	apt-get install software-properties-common
-	add-apt-repository ppa:ubuntu-toolchain-r/test
-	apt-get update
-	apt-get install libstdc++-7-dev
-
+	
 	# enter workspace
 	cd $WORKSPACE_PATH
 
@@ -104,12 +96,12 @@ stop() {
 	count=0;
 	until [ `ps -p $pid | grep -c $pid` = '0' ]
 	do
-	  echo -n -e "\nwaiting for processes to exit";
+	  echo -n -e "\nwaiting for processes to exit \n ";
 	  sleep 1
 	  let count=$count+1;
 	done
 	else
-	echo "GXChain witness node not running"
+	echo "GXChain witness node not running \n"
 	fi
 	return 0
 }
@@ -138,9 +130,9 @@ status)
   pid=$(witness_node_pid)
   if [ -n "$pid" ]
   then
-    echo "GXChain witness node is running with pid: $pid"
+    echo "GXChain witness node is running with pid: $pid\n"
   else
-    echo "GXChain witness node is not running"
+    echo "GXChain witness node is not running\n"
   fi
 ;;
 esac

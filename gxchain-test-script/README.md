@@ -29,10 +29,21 @@ $ chmod +x gxchain_test_script.sh
 
 ### 安装测试链
 
-下载公信链最新测试版本
+下载公信链最新测试版本，执行安装命令：
 
 ```powershell
 $ ./gxchain_test_script.sh install
+```
+
+关于公信链依赖配置的安装，已在执行Ubuntu优化脚本 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh) 时所执行安装，若未执行过 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh)  脚本，则需要单独执行依赖安装：
+
+```powershell
+$ sudo apt-get install ntp
+$ apt-get update
+$ apt-get install software-properties-common
+$ add-apt-repository ppa:ubuntu-toolchain-r/test
+$ apt-get update
+$ apt-get install libstdc++-7-dev
 ```
 
 ### 同步区块
@@ -111,9 +122,9 @@ $ ./gxchain_test_script.sh restart
 $ ./gxchain_test_script.sh stop
 ```
 
-开始公信链
+运行公信链
 
 ```powershell
-$ ./gxchain_test_script.sh stop
+$ ./gxchain_test_script.sh start
 ```
 
