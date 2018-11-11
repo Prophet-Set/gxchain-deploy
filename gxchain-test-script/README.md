@@ -92,9 +92,9 @@ $ ./gxchain_test_script.sh sync_block
 
 ### 初始化配置
 
-公信链启动后，会在 `testnet_node` 目录下生成 `config.ini` 配置文件，用于公信链启动参数的配置。
+公信链启动后，会在 `testnet_node` 目录下生成 `config.ini` 配置文件，用于公信链运行参数的配置。使用配置文件管理启动参数优于以命令行的方式管理启动参数。
 
-使用配置文件管理启动参数优于以命令行的方式管理启动参数。
+使用如下命令，可以将脚本中的参数配置写入到 `config.ini` 配置文件中
 
 ```powershell
 $ ./gxchain_test_script.sh gen_config
