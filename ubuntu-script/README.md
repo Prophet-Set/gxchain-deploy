@@ -46,10 +46,10 @@
 
   - `apt-get upgrade`
 
-  - 安装gxchain依赖包及常用的软件包，可根据自己的需求自行配置
+  - 安装有用的软件包，可根据自己的需求自行配置
 
     ```shell
-    apt-get install -y ntp htop zsh git-core software-properties-common libstdc++-7-dev
+    apt-get install -y iptables iptables-persistent fail2ban unzip ntp htop zsh git-core software-properties-common
     ```
 
 - 系统配置优化
@@ -76,6 +76,19 @@
 $ wget https://raw.githubusercontent.com/gxcdac/gxchain-script/master/ubuntu-script/ubuntu_optimize.sh
 ```
 
+### 自定义功能
+
+你可以根据自己的需要，修改脚本末尾的调用的函数，注释或开启你想要优化的配置
+
+```shell
+change_hostname
+sshuser_tunning
+sshd_config_tunning
+package_tunning
+base_system_tunning
+disk_dev_tunning
+```
+
 ### 修改脚本默认参数
 
 1. 设置新建的普通用户名，例如：
@@ -84,7 +97,13 @@ $ wget https://raw.githubusercontent.com/gxcdac/gxchain-script/master/ubuntu-scr
    MY_NEW_USER='gxchainuser'
    ```
 
-2. 设置数据盘
+2. 设置ssh端口，例如：
+
+   ```shell
+   MY_SSH_PORT=41837
+   ```
+
+3. 设置数据盘
 
    - 登录服务器，执行命令 `fdisk -l` 查看数据盘的路径，例如为 `/dev/vda1`
 
@@ -105,12 +124,6 @@ $ wget https://raw.githubusercontent.com/gxcdac/gxchain-script/master/ubuntu-scr
      ```shell
      MY_DATA_DEV='vda1'
      ```
-
-3. 设置 ssh 登录端口。找到脚本中的下面这段代码，将 41837 改成你想设置的端口：
-
-   ```shell
-   sed -ri 's/Port 22/Port 41837/g' /etc/ssh/sshd_config
-   ```
 
 
 
@@ -247,8 +260,8 @@ PORTS2="22"
 for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port2 -j ACCEPT;done
 
 # allow your own app port
-PORTS2="22"
-for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port2 -j ACCEPT;done
+PORTS3="22"
+for port3 in $PORTS3;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port3 -j ACCEPT;done
 ```
 
 #### 执行脚本
@@ -267,8 +280,14 @@ for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $
 
 
 
-## 其他配置
+## 重启服务器
 
-- 配置服务器快照策略
-- 配置磁盘快照策略
+- 重启服务器，使一系列配置生效
+
+
+
+## 其他
+
+- 配置阿里云服务器快照策略
+- 配置阿里云磁盘快照策略
 

@@ -11,6 +11,7 @@ echo "#--------------------------------------------------------------------"
 
 MY_NEW_USER='gxchainuser'
 MY_DATA_DEV='vda1'
+MY_SSH_PORT=41837
 name=`hostname`
 ETH1=""
 if ifconfig eth1 &> /dev/null;then
@@ -48,14 +49,18 @@ done
 
 change_hostname(){
   # change hostname for server
+  echo "Starting change hostname"
   hostname $HOSTNAME
   sed -i "s/^.*/$HOSTNAME/g" /etc/hostname
   sed -i "s/^${ETH0}.*/${ETH0} ${HOSTNAME} ${HOSTNAME}/g" /etc/hosts
+  echo "Finished change hostname"
 }
 
 sshuser_tunning(){
   # https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-ubuntu-16-04
   # backup file
+  echo "Starting sshuser tunning"
+
   cp -p /etc/passwd /etc/passwd.bak
   cp -p /etc/shadow /etc/shadow.bak
   cp -p /etc/group /etc/group.bak
@@ -103,9 +108,12 @@ sshuser_tunning(){
     chown $MY_NEW_USER:$MY_NEW_USER /home/$MY_NEW_USER/.profile
   fi
 
+  echo "Finished sshuser tunning"
 }
 
 sshd_config_tunning(){
+  echo "Starting sshd_config_tunning"
+
   # sshd config
   # https://www.cyberciti.biz/tips/linux-unix-bsd-openssh-server-best-practices.html
 
@@ -127,7 +135,7 @@ sshd_config_tunning(){
   if ! grep 'DenyUsers root' /etc/ssh/sshd_config >/dev/null;then echo "DenyUsers root" >> /etc/ssh/sshd_config;fi
   
   # change ssh port from 22 to 41837
-  sed -ri 's/Port 22/Port 41837/g' /etc/ssh/sshd_config
+  sed -ri "s/Port 22/Port $MY_SSH_PORT/g" /etc/ssh/sshd_config
 
   # Configure idle log out timeout interval
   if ! grep 'ClientAliveInterval 300' /etc/ssh/sshd_config >/dev/null;then echo "ClientAliveInterval 300" >> /etc/ssh/sshd_config;fi
@@ -147,6 +155,8 @@ sshd_config_tunning(){
 
   ## Logrotate
   #  sed -i 's/\#compress/compress/' /etc/logrotate.conf
+
+  echo "Finished sshd_config_tunning"
 }
 
 sshd_pwd_auth_tunning(){
@@ -155,12 +165,14 @@ sshd_pwd_auth_tunning(){
 }
 
 package_tunning(){
+  echo "Starting package_tunning"
+
   # update & upgrade
   apt-get update -y
   apt-get upgrade -y
 
   # install some package
-  apt-get install -y iptables iptables-persistent ntp htop zsh git-core software-properties-common
+  apt-get install -y iptables iptables-persistent fail2ban unzip ntp htop zsh git-core software-properties-common
   # install libstdc++-7-dev
   add-apt-repository ppa:ubuntu-toolchain-r/test
   apt-get update -y
@@ -171,10 +183,12 @@ package_tunning(){
   apt-get upgrade
   # The following packages were automatically installed and are no longer required
   # apt autoremove linux-headers-4.4.0-87 linux-headers-4.4.0-87-generic linux-image-4.4.0-87-generic linux-image-extra-4.4.0-87-generic
+  echo "Finished package_tunning"
 }
 
-
 base_system_tunning(){
+  echo "Starting base_system_tunning"
+  
   # set language US
   if ! grep 'LANGUAGE=en_US.UTF-8' /etc/profile >/dev/null; then
   echo 'export LANGUAGE=en_US.UTF-8
@@ -452,9 +466,12 @@ export LC_ALL=en_US.UTF-8
 
   sysctl -p
 
+  echo "Finished base_system_tunning"
 }
 
 disk_dev_tunning(){
+  echo "Starting disk_dev_tunning"
+
   # install lvm
   apt-get install -y lvm2
 
@@ -493,63 +510,52 @@ disk_dev_tunning(){
     /bin/mount /dev/domuvg/alidata /mydata
     echo "/dev/domuvg/alidata         /mydata                    ext4    defaults        0 0" >> /etc/fstab
   fi
+
+  echo "Finished disk_dev_tunning"
+}
+
+
+nginx_protect_tunning(){
+  echo "Starting nginx_protect_tunning"
+  # prevent our changes from being overwritten if a package update provides a new default file:
+  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+  
+  echo "Finished nginx_protect_tunning"
 }
 
 output_passwd(){
-PASS_FILE=/tmp/pass_temp
-HOSTNAME=$(hostname)
-echo "----SYSTEM INFORMATION---- " > $PASS_FILE
-if [ ! "$ETH1" = "" ];then
-  echo "    eth1 is $ETH1" >> $PASS_FILE
-fi
-
-echo "    eth0 is $ETH0
-    hostname is $HOSTNAME
-    username is $MY_NEW_USER
-    port is 41837
-    password is $PASS
------------END-----------" >> $PASS_FILE
-cat $PASS_FILE
-rm -rf $PASS_FILE
-exit 0
+  echo "output system user password"
+  PASS_FILE=/tmp/pass_temp
+  HOSTNAME=$(hostname)
+  echo "----SYSTEM INFORMATION---- " > $PASS_FILE
+  if [ ! "$ETH1" = "" ];then
+    echo "    eth1 is $ETH1" >> $PASS_FILE
+  fi
+  echo "    eth0 is $ETH0
+      hostname is $HOSTNAME
+      username is $MY_NEW_USER
+      port is 41837
+      password is $PASS
+  -----------END-----------" >> $PASS_FILE
+  cat $PASS_FILE
+  rm -rf $PASS_FILE
+  exit 0
+  echo "Finished output passowrd"
 }
-
 
 /usr/bin/id $MY_NEW_USER >/dev/null 2>&1;
 
 if [ $? = 0 ]; then
     echo "Account $MY_NEW_USER has already exists, Don't run the scripts twice.";
 else
-
-    echo "Starting change_hostname"
     change_hostname
-    echo "Finished change_hostname"
-
-    echo "Starting sshuser_tunning"
     sshuser_tunning
-    echo "Finished sshuser_tunning"
-
-    echo "Starting sshd_config_tunning"
-    sshd_config_tunning    
-    echo "Finished sshd_config_tunning"
-
-    echo "Starting package_tunning"
+    sshd_config_tunning   
     package_tunning
-    echo "Finished package_tunning"
-
-    echo "Starting base_system_tunning"
     base_system_tunning
-    echo "Finished base_system_tunning"
-
-    echo "Starting disk_dev_tunning"
     disk_dev_tunning
-    echo "Finished disk_dev_tunning"
-
-    echo "output system user password"
+    nginx_protect_tunning
     output_passwd
-    echo "Finished output passowrd"
-
     service sshd restart
     echo "Please send the output information to the administrator to update KeePass"
-
 fi
