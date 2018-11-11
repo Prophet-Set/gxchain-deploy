@@ -86,7 +86,7 @@ $ ./gxchain_test_script.sh sync_block
 使用配置文件管理启动参数优于以命令行的方式管理启动参数。
 
 ```powershell
-$ ./gxchain_test_script.sh generate_config
+$ ./gxchain_test_script.sh gen_config
 ```
 
 
