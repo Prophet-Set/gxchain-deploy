@@ -4,6 +4,7 @@
 # Script Firewall for INPUT and OUTPUT rules
 #
 # https://help.ubuntu.com/community/UFW
+# https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
 # 
 ################################################
 version_num=20181010
@@ -52,14 +53,14 @@ input_rules() {
   iptables -A INPUT -p icmp -m icmp --icmp-type time-exceeded -m limit --limit 10/second -j ACCEPT
   iptables -A INPUT -p icmp -m icmp --icmp-type destination-unreachable -m limit --limit 10/second -j ACCEPT
   iptables -A INPUT -p icmp -j DROP
-
+  
   ###### Add the input rules here:
   # iptables -A INPUT -p tcp -m state --state NEW -m tcp -s <source_address> --dport <destnation_port> -j ACCEPT
   ###### Add an end
-
+  
   # ssh 端口只对跳板机开放
   iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport 22 -j ACCEPT
-
+  
   # 80、443 端口只对 SLB 开放
   iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport 80 -j ACCEPT
   iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport 443 -j ACCEPT
@@ -91,16 +92,14 @@ output_rules() {
   ###### Add an end
   
   # allow DNS-NTP-FTP-HTTP-HTTPS-SMTP
-  PORTS1="53 123 21 80 443 25"
+  PORTS1="53 123"
   for port1 in $PORTS1;do iptables -A OUTPUT -p udp -m state --state NEW --dport $port1 -j ACCEPT;done
-  
-  # allow your custom SSH port
-  PORTS2="22"
+  PORTS2="22 21 80 443 25"
   for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port2 -j ACCEPT;done
   
-  # allow your own app port
-  PORTS2="22"
-  for port2 in $PORTS2;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port2 -j ACCEPT;done
+  # allow your own port
+  PORTS3="8888 9999 "
+  for port3 in $PORTS3;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $port3 -j ACCEPT;done
   
   iptables -A OUTPUT -j DROP
   echo -e "$GREEN OUTPUT rules created done. $NO_COLOR"
