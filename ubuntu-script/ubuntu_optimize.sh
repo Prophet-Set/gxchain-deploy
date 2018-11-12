@@ -534,7 +534,7 @@ output_passwd(){
   echo "    eth0 is $ETH0
       hostname is $HOSTNAME
       username is $MY_NEW_USER
-      port is 41837
+      port is $MY_SSH_PORT
       password is $PASS
   -----------END-----------" >> $PASS_FILE
   cat $PASS_FILE
