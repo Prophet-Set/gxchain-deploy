@@ -90,17 +90,17 @@ stop() {
 	pid=$(witness_node_pid)
 	if [ -n "$pid" ]
 	then
-		echo "Stoping GXChain witness node ... "
-		/bin/su - -c "kill -s SIGINT $pid" $CMD_USER
-		count=0;
-		until [ `ps -p $pid | grep -c $pid` = '0' ]
-		do
-		  echo -n -e "\nwaiting for processes to exit \n ";
-		  sleep 1
-		  let count=$count+1;
-		done
+	  echo "Stoping GXChain witness node ... "
+	  /bin/su - -c "kill -s SIGINT $pid" $CMD_USER
+  	  count=0;
+	  until [ `ps -p $pid | grep -c $pid` = '0' ]
+	  do
+	   echo -n -e "\nwaiting for processes to exit \n ";
+	   sleep 1
+	   let count=$count+1;
+	  done
 	else
-		echo "GXChain witness node not running \n"
+	  echo "GXChain witness node not running \n"
 	fi
 	return 0
 }
