@@ -18,12 +18,12 @@ $ chmod +x gxchain_test_script.sh
 
 1. 根据自己的需要，在启动前修改 [gxchain_test_script.sh](https://github.com/gxcdac/gxchain-script/tree/master/gxchain-test-script/gxchain_test_script.sh) 中的启动参数：
 
-   - `CMD_USER`：设置公信链运行的用户（非root）
+   - `CMD_USER`：设置公信链运行的用户（非root）。例如：`CMD_USER=gxchainuser`
 
-   - `WORKSPACE_PATH`：公信链运行目录
-   - `RPC_ENDPOINT`：RPC监听的地址端口
-   - `P2P_ENDPOINT`：P2P监听的地址端口
-   - `SEED_NODES`：种子节点，默认即可
+   - `WORKSPACE_PATH`：公信链运行目录。例如：`WORKSPACE_PATH=/mydata`
+   - `RPC_ENDPOINT`：RPC监听的地址端口。例如：`RPC_ENDPOINT="127.0.0.1:28090"`，建议RPC服务通过Nginx对外提供服务，这里ip地址填写为`127.0.0.1`或`localhost`。
+   - `P2P_ENDPOINT`：P2P监听的地址端口。例如：`P2P_ENDPOINT="0.0.0.0:9999"`
+   - `SEED_NODES`：种子节点，默认为 `SEED_NODES='["testnet.gxchain.org:6789"]'`
 
 2. 查看服务器防火墙以及云服务器的安全规则配置（例如阿里云的ECS的安全规则配置），确保对`rpc`和`p2p`端口开放
 
@@ -129,6 +129,10 @@ $ ./gxchain_test_script.sh start
 2018-11-12T03:43:41        th_a:?unnamed?                 main ] Started witness node on a chain with 8803779 blocks.			main.cpp:216
 2018-11-12T03:43:41        th_a:?unnamed?                 main ] Chain ID is c2af30ef9340ff81fd61654295e98a1ff04b23189748f86727d0b26b40bb0ff4			main.cpp:217
 2018-11-12T03:43:42 th_a:invoke handle_block         handle_block ] Got block: #8803933 time: 2018-11-12T03:43:42 latency: 35 ms from: init7  irreversible: 8803923 (-10)			application.cpp:496
+2018-11-12T04:08:18 th_a:invoke handle_block         handle_block ] Got block: #8804419 time: 2018-11-12T04:08:18 latency: 35 ms from: miner7  irreversible: 8804404 (-15)			application.cpp:496
+
+...
+
 ```
 
 **停止公信链**
@@ -155,4 +159,12 @@ $ ./gxchain_test_script.sh stop
 ```powershell
 $ ./gxchain_test_script.sh restart
 ```
+
+
+
+## 常见问题
+
+- 公信链启动之后，没有开始同步区块，请确保防火墙对RPC与P2P端口开放。
+
+
 
