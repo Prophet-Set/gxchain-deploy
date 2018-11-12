@@ -1,12 +1,12 @@
 #!/bin/bash
+#--------------------------------------------------------------------"
+# GXChain test node install script On Ubuntu 16.04 4.4.0-117-generic"
+# @author https://wangwei.one"
+# @date   20181108"
+#--------------------------------------------------------------------"
 # https://docs.gxchain.org/zh/guide/testnet.html
-#set -x
-echo "#--------------------------------------------------------------------"
-echo "# GXChain test node install script On Ubuntu 16.04 4.4.0-117-generic"
-echo "# @author https://wangwei.one"
-echo "# @date   20181108"
-echo "#--------------------------------------------------------------------"
 
+#set -x
 # config startup parameters
 CMD_USER=gxchainuser
 RPC_ENDPOINT="0.0.0.0:28090"
@@ -76,13 +76,11 @@ start() {
   else
     # Start run witness node
     echo "Starting witness node ... "
-    #ulimit -n 100000
-    umask 007
-    /bin/su - -c "$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR' --genesis-json $GENESIS_FILE_PATH >/dev/null 2>&1 < /dev/null &" $CMD_USER
+    CMD="$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR' --genesis-json $GENESIS_FILE_PATH"
+    /bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
   fi
-  
+  sleep 1
   tail -n 100 $DATA_DIR/logs/witness.log
-
   return 0
 }
 
