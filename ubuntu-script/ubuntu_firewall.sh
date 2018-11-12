@@ -119,6 +119,20 @@ if [ "$1" = "-h" ] || [ "$1" = "-H" ] || [ "$1" = "--help" ] || [ "$1" = "--HELP
    exit 2
 fi
 
+save_rules(){
+  if [[ ! -f "/etc/iptables.conf" ]]; then
+      touch /etc/iptables.conf
+  fi
+  iptables-save > /etc/iptables.conf
+
+  grep 'iptables-restore' /etc/rc.local &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "iptables-restore < /etc/iptables.conf" >> /etc/rc.local
+  fi
+  
+  echo -e "$GREEN iptables rules saved done. $NO_COLOR"
+}
+
 echo "############################################"
 echo $(basename $0)
 printf "Version: %s\n" $version_num
@@ -127,5 +141,6 @@ backup_rules
 clean_iptables
 input_rules
 output_rules
+save_rules
 echo "############################################"
 echo "Done. "
