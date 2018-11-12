@@ -104,6 +104,16 @@ $ ./gxchain_test_script.sh gen_config
 
 ## 公信链管理
 
+**开机自启动配置**
+
+将如下内容，添加到  `/etc/rc.local` 配置末尾，具体路劲以实际情况为准
+
+```shell
+/bin/sh /mydata/gxchain_test_script.sh start
+```
+
+> 注意：要放到  `exist 0` 指令之前。
+
 **查看公信链状态**
 
 ```powershell
