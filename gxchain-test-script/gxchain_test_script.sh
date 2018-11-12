@@ -40,7 +40,7 @@ install(){
 sync_block() {
 	echo "Starting GXChain sync block ... "
 	
-	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir=$DATA_DIR --rpc-endpoint=$RPC_ENDPOINT --p2p-endpoint=$P2P_ENDPOINT --seed-nodes=$SEED_NODES --genesis-json $GENESIS_FILE_PATH"
+	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' --rpc-endpoint='$RPC_ENDPOINT' --p2p-endpoint='$P2P_ENDPOINT' --seed-nodes='$SEED_NODES' --genesis-json $GENESIS_FILE_PATH"
 
 	/bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
 
@@ -54,9 +54,9 @@ gen_config(){
 	# backup config.ini
 	cp $DATA_DIR/config.ini $DATA_DIR/config.ini.bak
 
-	sed -ri "s/#\s+p2p-endpoint\s+=/p2p-endpoint='${P2P_ENDPOINT}'/g;" $DATA_DIR/config.ini
+	sed -ri "s/#\s+p2p-endpoint\s+=/p2p-endpoint=\"${P2P_ENDPOINT}\"/g;" $DATA_DIR/config.ini
 	sed -ri "s/#\s+seed-nodes\s+=/seed-nodes=${SEED_NODES}/g;" $DATA_DIR/config.ini
-	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint='${RPC_ENDPOINT}'/g;" $DATA_DIR/config.ini
+	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint=\"${RPC_ENDPOINT}\"/g;" $DATA_DIR/config.ini
 
 	echo "Generate config.ini Finished ! "
 
