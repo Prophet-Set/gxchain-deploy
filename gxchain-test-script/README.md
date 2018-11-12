@@ -25,17 +25,17 @@ $ chmod +x gxchain_test_script.sh
    - `P2P_ENDPOINT`：P2P监听的地址端口。例如：`P2P_ENDPOINT="0.0.0.0:9999"`
    - `SEED_NODES`：种子节点，默认为 `SEED_NODES='["testnet.gxchain.org:6789"]'`
 
-2. 查看服务器防火墙以及云服务器的安全规则配置（例如阿里云的ECS的安全规则配置），确保对`rpc`和`p2p`端口开放
+2. 查看服务器防火墙以及云服务器的安全规则配置（例如阿里云的ECS的安全规则配置），确保对`rpc`和`p2p`端口开放。
 
 ### 安装测试链
 
-下载公信链最新测试版本，执行安装命令：
+执行安装命令，用以下载公信链最新测试版本：
 
 ```powershell
 $ ./gxchain_test_script.sh install
 ```
 
-关于公信链依赖配置的安装，已在执行Ubuntu优化脚本 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh) 时所执行安装，若未执行过 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh)  脚本，则需要单独执行依赖安装：
+关于公信链依赖配置的安装，已在执行Ubuntu优化脚本 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh) 时所安装，若未执行过 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh)  脚本，则需要单独执行依赖安装：
 
 ```powershell
 $ sudo apt-get install ntp
