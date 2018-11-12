@@ -46,6 +46,7 @@ input_rules() {
     # Local traffic - allow all on intranet interface. <<<Apply to VPC environment>>>
     iptables -A INPUT -p tcp -m state --state NEW -m tcp -s $MY_ETH0_IP_SEG -j ACCEPT
   fi
+  iptables -A INPUT -p tcp -m state --state NEW -m tcp -s localhost -j ACCEPT
 
   iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p icmp -m icmp --icmp-type echo-request -m limit --limit 10/second -j ACCEPT
@@ -67,7 +68,7 @@ input_rules() {
   
   # allow your own app port
   iptables -A INPUT -p tcp -m state --state NEW -m tcp -s xxx.xxx.xxx.xxx --dport xxx -j ACCEPT
-
+  
   iptables -A INPUT -j DROP
   echo -e "$GREEN INPUT rules created done. $NO_COLOR"
 }
@@ -77,9 +78,13 @@ output_rules() {
   # Local traffic allowed accept al on lo interface
   iptables -A OUTPUT -o lo -j ACCEPT
   if ifconfig eth1 &> /dev/null;then
-	iptables -A OUTPUT -o eth0 -j ACCEPT
+	  iptables -A OUTPUT -o eth0 -j ACCEPT
+  else
+    # Local traffic - allow all on intranet interface. <<<Apply to VPC environment>>>
+    iptables -A OUTPUT -p tcp -m state --state NEW -m tcp -s $MY_ETH0_IP_SEG -j ACCEPT
   fi
-
+  iptables -A OUTPUT -p tcp -m state --state NEW -m tcp -s localhost -j ACCEPT
+  
   iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p icmp -m icmp --icmp-type echo-request -m limit --limit 10/second -j ACCEPT
   iptables -A OUTPUT -p icmp -m icmp --icmp-type echo-reply -m limit --limit 10/second -j ACCEPT
