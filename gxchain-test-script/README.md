@@ -104,27 +104,55 @@ $ ./gxchain_test_script.sh gen_config
 
 ## 公信链管理
 
-查看公信链状态
+**查看公信链状态**
 
 ```powershell
 $ ./gxchain_test_script.sh status
 ```
 
-重启公信链
+**启动公信链**
 
 ```powershell
-$ ./gxchain_test_script.sh restart
+$ ./gxchain_test_script.sh start
 ```
 
-停止公信链
+日志输出：
+
+```
+2018-11-12T03:43:41        th_a:?unnamed?       reset_p2p_node ] Adding seed node 106.14.180.117:6789			application.cpp:152
+2018-11-12T03:43:41        th_a:?unnamed?       reset_p2p_node ] Configured p2p node to listen on 0.0.0.0:9999			application.cpp:194
+2018-11-12T03:43:41        th_a:?unnamed? reset_websocket_serv ] Configured websocket rpc to listen on 0.0.0.0:28090			application.cpp:269
+2018-11-12T03:43:41        th_a:?unnamed?       plugin_startup ] data transaction plugin startup			data_transaction_plugin.cpp:63
+2018-11-12T03:43:41        th_a:?unnamed?       plugin_startup ] witness plugin:  plugin_startup() begin			witness.cpp:121
+2018-11-12T03:43:41        th_a:?unnamed?       plugin_startup ] No witnesses configured! Please add witness IDs and private keys to configuration.			witness.cpp:137
+2018-11-12T03:43:41        th_a:?unnamed?       plugin_startup ] witness plugin:  plugin_startup() end			witness.cpp:138
+2018-11-12T03:43:41        th_a:?unnamed?                 main ] Started witness node on a chain with 8803779 blocks.			main.cpp:216
+2018-11-12T03:43:41        th_a:?unnamed?                 main ] Chain ID is c2af30ef9340ff81fd61654295e98a1ff04b23189748f86727d0b26b40bb0ff4			main.cpp:217
+2018-11-12T03:43:42 th_a:invoke handle_block         handle_block ] Got block: #8803933 time: 2018-11-12T03:43:42 latency: 35 ms from: init7  irreversible: 8803923 (-10)			application.cpp:496
+```
+
+**停止公信链**
 
 ```powershell
 $ ./gxchain_test_script.sh stop
 ```
 
-运行公信链
+日志输出：
+
+```
+
+...
+
+2018-11-12T03:35:53        asio:?unnamed?           operator() ] Caught SIGINT attempting to exit cleanly			main.cpp:207
+2018-11-12T03:35:53        th_a:?unnamed?                 main ] Exiting from signal 2			main.cpp:220
+2018-11-12T03:35:53        th_a:?unnamed?      plugin_shutdown ] data transaction plugin shutdown			data_transaction_plugin.cpp:68
+2018-11-12T03:35:53        th_a:?unnamed?                close ] head_block_num: 8803779, last_irreversible_block_num: 8803771			db_management.cpp:204
+2018-11-12T03:35:53        th_a:?unnamed?                close ] Rewinding from 8803779 to 8803771			db_management.cpp:205
+```
+
+**重启公信链**
 
 ```powershell
-$ ./gxchain_test_script.sh start
+$ ./gxchain_test_script.sh restart
 ```
 
