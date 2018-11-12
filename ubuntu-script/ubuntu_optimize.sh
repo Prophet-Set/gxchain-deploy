@@ -212,8 +212,17 @@ export LC_ALL=en_US.UTF-8
   cp /etc/sysctl.conf /etc/sysctl.conf.bak
 
   modprobe ip_conntrack
-  echo 'modprobe ip_conntrack' >> /etc/rc.local
-  echo 'echo 64000 > /sys/module/nf_conntrack/parameters/hashsize' >> /etc/rc.local
+  grep 'modprobe ip_conntrack' /etc/rc.local &> /dev/null
+  if [ $? != 0 ] ; then
+    sed -i '/exit\s0/d' /etc/rc.local
+    echo -e 'modprobe ip_conntrack\nexit 0' >> /etc/rc.local
+  fi
+
+  grep '/sys/module/nf_conntrack/parameters/hashsize' /etc/rc.local &> /dev/null
+  if [ $? != 0 ] ; then
+    sed -i '/exit\s0/d' /etc/rc.local
+    echo -e 'echo 64000 > /sys/module/nf_conntrack/parameters/hashsize\nexit 0' >> /etc/rc.local
+  fi
   
   # https://wiki.ubuntu.com/ImprovedNetworking/KernelSecuritySettings
   grep 'kernel.panic' /etc/sysctl.conf &> /dev/null

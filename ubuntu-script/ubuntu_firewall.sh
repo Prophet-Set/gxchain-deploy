@@ -127,7 +127,8 @@ save_rules(){
 
   grep 'iptables-restore' /etc/rc.local &> /dev/null
   if [ $? != 0 ] ; then
-    echo "iptables-restore < /etc/iptables.conf" >> /etc/rc.local
+    sed -i '/exit\s0/d' /etc/rc.local
+    echo -e "iptables-restore < /etc/iptables.conf\nexit 0" >> /etc/rc.local
   fi
   
   echo -e "$GREEN iptables rules saved done. $NO_COLOR"
