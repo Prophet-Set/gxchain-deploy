@@ -54,9 +54,9 @@ gen_config(){
 	# backup config.ini
 	cp $DATA_DIR/config.ini $DATA_DIR/config.ini.bak
 
-	sed -ri "s/#\s+p2p-endpoint\s+=/p2p-endpoint=\"${P2P_ENDPOINT}\"/g;" $DATA_DIR/config.ini
+	sed -ri "s/#\s+p2p-endpoint\s+=/p2p-endpoint=${P2P_ENDPOINT}/g;" $DATA_DIR/config.ini
 	sed -ri "s/#\s+seed-nodes\s+=/seed-nodes=${SEED_NODES}/g;" $DATA_DIR/config.ini
-	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint=\"${RPC_ENDPOINT}\"/g;" $DATA_DIR/config.ini
+	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint=${RPC_ENDPOINT}/g;" $DATA_DIR/config.ini
 
 	echo "Generate config.ini Finished ! "
 
@@ -78,10 +78,10 @@ start() {
     echo "Starting witness node ... "
     #ulimit -n 100000
     umask 007
-    /bin/su - -c "cd $PROGRAMS_DIR/witness_node  && $PROGRAMS_DIR/witness_node/witness_node --data-dir=$DATA_DIR --genesis-json $GENESIS_FILE_PATH" $CMD_USER
+    /bin/su - -c "$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR' --genesis-json $GENESIS_FILE_PATH >/dev/null 2>&1 < /dev/null &" $CMD_USER
   fi
   
-  tail -n 300 $DATA_DIR/logs/witness.log
+  tail -n 100 $DATA_DIR/logs/witness.log
 
   return 0
 }
@@ -90,18 +90,17 @@ stop() {
 	pid=$(witness_node_pid)
 	if [ -n "$pid" ]
 	then
-	echo "Stoping GXChain witness node ... "
-	/bin/su - -c "kill -s SIGINT $pid" $CMD_USER
-
-	count=0;
-	until [ `ps -p $pid | grep -c $pid` = '0' ]
-	do
-	  echo -n -e "\nwaiting for processes to exit \n ";
-	  sleep 1
-	  let count=$count+1;
-	done
+		echo "Stoping GXChain witness node ... "
+		/bin/su - -c "kill -s SIGINT $pid" $CMD_USER
+		count=0;
+		until [ `ps -p $pid | grep -c $pid` = '0' ]
+		do
+		  echo -n -e "\nwaiting for processes to exit \n ";
+		  sleep 1
+		  let count=$count+1;
+		done
 	else
-	echo "GXChain witness node not running \n"
+		echo "GXChain witness node not running \n"
 	fi
 	return 0
 }
