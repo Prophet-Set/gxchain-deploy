@@ -20,7 +20,7 @@ MIX_NGINX_VERSION='1.2.3'
 #defind version
 OPENSSL_VERSION='1.1.1'
 # https://www.modpagespeed.com/doc/release_notes
-NPS_VERSION='1.13.35.1-beta'
+NPS_VERSION='1.13.35.2-stable'
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
@@ -56,21 +56,21 @@ echo "Download ngx_cache_purge"
 git clone https://github.com/FRiCKLE/ngx_cache_purge.git
 
 # Download PageSpeed
+# https://www.modpagespeed.com/doc/build_ngx_pagespeed_from_source
 cd ${BUILD_HOME}
 echo "Delete pagespeed ngx ${NPS_VERSION} "
 rm -rf ${BUILD_HOME}/*${NPS_VERSION}*
 echo "Download pagespeed ngx ${NPS_VERSION} "
 wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
 unzip v${NPS_VERSION}.zip
-nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
+nps_dir=$(find ${BUILD_HOME} -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
 cd "$nps_dir"
 NPS_RELEASE_NUMBER=${NPS_VERSION/beta/}
 NPS_RELEASE_NUMBER=${NPS_VERSION/stable/}
 psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz
 [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
 wget ${psol_url}
-# extracts to psol/
-tar -xzvf $(basename ${psol_url})
+tar -xzvf $(basename ${psol_url}) # extracts to psol/
 
 # Get the Nginx source.
 #

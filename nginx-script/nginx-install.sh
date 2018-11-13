@@ -8,7 +8,7 @@
 #------------------------------------------------------
 set -e
 
-NGINX_SCRIPT_HOME="/home/gxchainuser/nginx-script/"
+NGINX_SCRIPT_HOME="/home/gxcchainuser/gxchain-script/nginx-script"
 
 NGINX_HOME="/etc/nginx/"
 NGINX_GROUP="nginx"
