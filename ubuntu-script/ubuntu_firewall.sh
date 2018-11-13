@@ -120,7 +120,7 @@ if [ "$1" = "-h" ] || [ "$1" = "-H" ] || [ "$1" = "--help" ] || [ "$1" = "--HELP
 fi
 
 save_rules(){
-  if [[ ! -f "/etc/iptables.conf" ]]; then
+  if [ ! -f "/etc/iptables.conf" ]; then
       touch /etc/iptables.conf
   fi
   iptables-save > /etc/iptables.conf

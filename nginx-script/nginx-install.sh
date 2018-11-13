@@ -6,6 +6,7 @@
 # @author https://wangwei.one/
 # @date 2018/11/13
 #------------------------------------------------------
+set -e
 
 NGINX_SCRIPT_HOME="/home/gxchainuser/nginx-script/"
 
@@ -33,18 +34,18 @@ config(){
 	# create nginx user and group
 	# create $NGINX_GROUP if not exists  
 	egrep "^$NGINX_GROUP" /etc/group >& /dev/null  
-	if [[ $? -ne 0 ]]; then
+	if [ $? -ne 0 ]; then
 		groupadd $NGINX_GROUP
 	fi
 	# create $NGINX_USER if not exists  
 	egrep "^$NGINX_USER" /etc/passwd >& /dev/null 
-	if [[ $? -ne 0 ]]; then
+	if [ $? -ne 0 ]; then
 	    useradd -s /bin/false -g $NGINX_GROUP -M $NGINX_USER
 	fi 
 	echo -e "$GREEN Nginx user and group create finished ! $NO_COLOR"
 
 	# clean default config files
-	if [[ ! -d "$NGINX_HOME/default.d/" ]]; then
+	if [ ! -d "$NGINX_HOME/default.d/" ]; then
 		mkdir -p $NGINX_HOME/default.d/
 	fi
 	mv $NGINX_HOME/*.default $NGINX_HOME/default.d/
@@ -86,6 +87,25 @@ certbot(){
 	# auto renew config
 	# certbot renew --dry-run
 }
+
+case $1 in
+compile)
+  compile
+;;
+install)
+  install
+;;
+uninstall)
+  uninstall
+;;  
+config)
+  config
+;;
+certbot)
+  certbot
+;;
+esac
+exit 0
 
 
 

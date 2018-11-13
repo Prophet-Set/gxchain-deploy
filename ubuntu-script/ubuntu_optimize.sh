@@ -43,7 +43,7 @@ HOSTNAME=$1
 
 hostname_check
 
-while [[ "$HOSTNAME" != *-* ]];do
+while [ "$HOSTNAME" != *-* ];do
 echo "Wrong name,example:xxx-xxx"; hostname_check
 done
 
@@ -94,14 +94,14 @@ sshuser_tunning(){
   echo $MY_NEW_USER:$PASS | /usr/sbin/chpasswd
 
   # customizing bash prompt
-  if [[ ! -f "/home/$MY_NEW_USER/.bashrc" ]]; then
+  if [ ! -f "/home/$MY_NEW_USER/.bashrc" ]; then
     touch "/home/$MY_NEW_USER/.bashrc"
     cat /root/.bashrc > /home/$MY_NEW_USER/.bashrc
     chmod 644 /home/$MY_NEW_USER/.bashrc
     chown $MY_NEW_USER:$MY_NEW_USER /home/$MY_NEW_USER/.bashrc
   fi
 
-  if [[ ! -f "/home/$MY_NEW_USER/.profile" ]]; then
+  if [ ! -f "/home/$MY_NEW_USER/.profile" ]; then
     touch "/home/$MY_NEW_USER/.profile"
     cat /root/.profile > /home/$MY_NEW_USER/.profile
     chmod 644 /home/$MY_NEW_USER/.profile

@@ -6,6 +6,7 @@
 # @author https://wangwei.one/
 # @date 2018/11/13
 #------------------------------------------------------
+set -e
 
 # config build home
 BUILD_HOME="/home/gxcchainuser/compile/"
@@ -34,7 +35,7 @@ apt-get update &&  apt-get upgrade -y
 apt-get install checkinstall libpcre3 libpcre3-dev zlib1g zlib1g-dbg zlib1g-dev uuid-dev build-essential
 
 # create build home
-if [[ ! -d ${BUILD_HOME} ]]; then
+if [ ! -d ${BUILD_HOME} ]; then
    echo "create build home"
    mkdir -p ${BUILD_HOME}
 fi

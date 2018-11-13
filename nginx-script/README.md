@@ -1,7 +1,5 @@
 # Nginx优化配置
 
-
-
 ## 前言
 
 
@@ -21,18 +19,18 @@ $ chmod +x ~/gxchain-script/nginx-script/nginx-install.sh
 
 ### 参数配置
 
-配置脚本：`~/gxchain-script/nginx-script/nginx-install.sh`，例如：
+配置`nginx-install.sh`脚本参数，例如：
 
 ```shell
 #设置Nginx脚本目录
-NGINX_SCRIPT_HOME="/home/gxcchainuser/gxchain-script/nginx-script/"
+NGINX_SCRIPT_HOME="/home/gxcchainuser/gxchain-script/nginx-script"
 ```
 
-配置脚本：`~/gxchain-script/nginx-script/nginx-compile.sh`，例如：
+配置`nginx-compile.sh`脚本参数，例如：
 
 ```shell
 # 设置Nginx编译构建的目录
-BUILD_HOME="/home/gxcchainuser/compile/"
+BUILD_HOME="/home/gxcchainuser/compile"
 # 配置Nginx最新stable版本
 NGINX_VERSION='1.14.1'
 
@@ -43,21 +41,9 @@ MIX_NGINX_VERSION='1.2.3'
 
 ### 编译安装
 
-如果不想自己编译Nginx源码
-
 ```shell
 $ sudo ./nginx-install.sh compile
 ```
-
-
-
-```shell
-$ sudo ./nginx-install.sh install
-```
-
-
-
-
 
 
 
