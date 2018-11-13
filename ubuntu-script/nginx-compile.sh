@@ -120,7 +120,6 @@ cd ${BUILD_HOME}/nginx-${NGINX_VERSION}
 --with-http_random_index_module \
 --with-http_secure_link_module \
 --with-http_stub_status_module \
---with-http_limit_req_module \
 --with-mail \
 --with-mail_ssl_module \
 --with-file-aio \
