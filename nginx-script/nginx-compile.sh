@@ -17,6 +17,9 @@ NPS_VERSION='1.13.35.1-beta'
 MIX_NGINX_NAME='MyServer'
 MIX_NGINX_VERSION='1.2.3'
 
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+NO_COLOR="\033[0m"
 # Install dependencies
 # 
 # * checkinstall: package the .deb
@@ -129,8 +132,12 @@ cd ${BUILD_HOME}/nginx-${NGINX_VERSION}
 --add-module=$BUILD_HOME/$nps_dir \
 --add-module=$BUILD_HOME/ngx_cache_purge
 
+echo -e "$GREEN Nginx configure finished ! $NO_COLOR"
+
 # Make the package.
 make
+
+echo -e "$GREEN Nginx package make finished ! $NO_COLOR"
 
 # Create a .deb package.
 #
