@@ -523,15 +523,6 @@ disk_dev_tunning(){
   echo "Finished disk_dev_tunning"
 }
 
-
-nginx_protect_tunning(){
-  echo "Starting nginx_protect_tunning"
-  # prevent our changes from being overwritten if a package update provides a new default file:
-  cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-  
-  echo "Finished nginx_protect_tunning"
-}
-
 output_passwd(){
   echo "output system user password"
   PASS_FILE=/tmp/pass_temp
@@ -563,7 +554,6 @@ else
     package_tunning
     base_system_tunning
     disk_dev_tunning
-    nginx_protect_tunning
     output_passwd
     service sshd restart
     echo "Please send the output information to the administrator to update KeePass"

@@ -2,7 +2,7 @@
 
 ## 背景
 
-通常来讲，我们在买完云服务器之后，需要修改一些服务器的默认配置。例如，修改hostname、新增普通用户、修改ssh登录配置、更新安装包、磁盘挂载、swap分区配置、防火墙设置、内核安全设置等等一系列措施。这些操作费时费力，还容易出错，弄不好一天的时间就过去了。
+通常来讲，我们在买完云服务器之后，需要修改一些服务器的默认配置。例如，修改hostname、新增普通用户、修改ssh登录配置、更新安装包、磁盘挂载、swap分区配置、防火墙设置、内核安全设置等等一系列措施。这些操作费时费力，还容易出错，弄不好一天的时间就过去了，在搞不好，两天就过去了。
 
 通过此脚本，则可以分分钟准确地完成以上一系列配置。
 
@@ -16,53 +16,20 @@
 
 该脚本对**新服务器**的处理，主要如下：
 
-- 修改默认`hostname`
+| 项目     | 子项目                               | 说明                                                         |
+| -------- | ------------------------------------ | ------------------------------------------------------------ |
+| 基础设置 | 修改主机名                           | 修改默认的hostname                                           |
+|          | 系统编码                             | 添加 LANGUAGE、LANG、LC_ALL = en_US.UTF-8                    |
+|          | 时区设置                             | 设置为`Asia/Shanghai`                                        |
+| 普通用户 | 新建普通用户                         | 1. 创建`/home`目录下的用户目录.<br />2. 创建用户目录下一些必要的文件及文件夹：<br />`.ssh`,  `authorized_keys`, `.bashrc`, `.profile`.<br />3.设置bash.<br />4.设置普通用户密码，32位强度密码.<br />5.添加`sudo`权限.<br />6.设置ssh登录权限. |
+| SSH登录  | 优化sushi_config配置                 | 1.修改默认ssh端口(22).<br />2.关闭root登录权限.<br />3.新增的普通用户的ssh登录权限.<br />4.设置ssh会话超时时间. |
+| 软件更新 | 更新系统软件包<br />安装常用的软件包 | 1.apt-get update & upgrade<br />2.apt-get install -y iptables iptables-persistent<br /> fail2ban unzip ntp htop zsh git-core<br /> software-properties-common |
+| 内核优化 | 优化 /etc/sysctl.conf 配置           | kernel.panic<br />kernel.exec-shield<br />kernel.randomize_va_space<br />net.core.netdev_max_backlog<br />net.core.somaxconn<br />net.ipv4.icmp_ratelimit<br />net.ipv4.icmp_ratemask<br />net.ipv4.icmp_echo_ignore_broadcasts<br />net.ipv4.icmp_ignore_bogus_error_responses<br />net.ipv4.conf.all.accept_redirects<br />net.ipv4.conf.all.accept_source_route<br />net.ipv4.conf.all.rp_filter<br />net.ipv4.conf.all.log_martians<br />net.ipv4.conf.all.arp_announce<br />net.ipv4.conf.all.arp_ignore<br />fs.file-max<br />net.ipv4.tcp_syncookies<br />net.ipv4.tcp_max_syn_backlog<br />net.ipv4.tcp_rfc1337<br />net.ipv4.tcp_timestamps<br />net.ipv4.tcp_synack_retries<br />net.ipv4.tcp_syn_retries<br />net.ipv4.tcp_tw_recycle<br />net.ipv4.tcp_tw_reuse<br />net.ipv4.tcp_keepalive_time<br />net.ipv4.tcp_keepalive_intvl<br />net.ipv4.tcp_keepalive_probes<br />net.ipv4.tcp_fin_timeout<br />net.netfilter.nf_conntrack_tcp_timeout_time_wait<br />vm.swappiness<br />net.ipv4.ip_local_port_range<br />net.nf_conntrack_max |
+| 磁盘优化 | swap分区配置                         | 从阿里云数据盘中分出1G来作为swap                             |
+|          | 挂载数据盘                           | 将数据盘余下的空间挂载到 `/mydata` 目录下                    |
 
-- 新建普通用户并做一些设置
-
-  - 创建`/home`目录下的用户目录
-  - 创建用户目录下一些必要的文件及文件夹：`.ssh`,  `authorized_keys`, `.bashrc`, `.profile`
-  - 设置普通用户密码
-  - 添加到`sudo`权限
-  - 设置ssh登录权限
-
-- 优化`sshd_config`配置
-
-  > 参考：https://www.cyberciti.biz/tips/linux-unix-bsd-openssh-server-best-practices.html
-  >
-  > 说明：只是初步优化配置，并未强制关闭密码登录，未强制开启ssh key登录，不然在ssh key未配置的情况下，等该脚本执行完，你就无法登录服务器了。
-  >
-  > ssh登录需要等到后面再去单独设置
-
-  主要如下：
-
-  - 修改默认端口
-  - 关闭root登录权限
-  - 上一步新建的普通用户的登录权限
-
-- 更新软件包
-
-  - `apt-get update` 
-
-  - `apt-get upgrade`
-
-  - 安装有用的软件包，可根据自己的需求自行配置
-
-    ```shell
-    apt-get install -y iptables iptables-persistent fail2ban unzip ntp htop zsh git-core software-properties-common
-    ```
-
-- 系统配置优化
-
-  - 内核安全优化 `/etc/sysctl.conf`
-  - 设置 language 为 `en_US.UTF-8`
-
-- 磁盘分区处理
-
-  > 说明：阿里云的ECS默认挂载了系统盘，而该脚本主要是对**数据盘**做分区处理，系统盘无法处理
-
-  - 新增 1G 的 `swap` 分区
-  - 新建 `/mydata` 目录，并将数据盘挂载到 `/mydata` 目录下
+> - ssh key登录需要等到后面再去单独设置。这里只是初步优化配置，并未强制关闭密码登录，未强制开启ssh key登录，不然在ssh key未配置的情况下，等该脚本执行完，你就无法登录服务器了。
+> - 阿里云的ECS默认挂载了系统盘，而该脚本主要是对**数据盘**做分区处理，系统盘无法处理
 
 
 
