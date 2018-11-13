@@ -26,8 +26,8 @@ abcdefghijklmnopqrstuvwxyz./*&^%$#@!()"
 LENGTH="32"
 
   while [ "${n:=1}" -le "$LENGTH" ]; do
-      PASS="$PASS${MATRIX:$(($RANDOM%${#MATRIX})):1}"
-      let n+=1
+    PASS="$PASS${MATRIX:$(($RANDOM%${#MATRIX})):1}"
+    let n+=1
   done
 
 #echo "$PASS" # ==> Or, redirect to file, as desired.
@@ -36,15 +36,15 @@ LENGTH="32"
 hostname_check(){
 HOSTNAME=$1
   while [ -z "$HOSTNAME" ];do
-        printf "Please input %s: " "hostname"
-        read HOSTNAME
+    printf "Please input %s: " "hostname"
+    read HOSTNAME
   done
 }
 
 hostname_check
 
 while [ "$HOSTNAME" != *-* ];do
-echo "Wrong name,example:xxx-xxx"; hostname_check
+  echo "Wrong name,example:xxx-xxx"; hostname_check
 done
 
 change_hostname(){
@@ -168,19 +168,18 @@ package_tunning(){
   echo "Starting package_tunning"
 
   # update & upgrade
-  apt-get update -y
-  apt-get upgrade -y
-
+  apt-get update && apt-get upgrade -y
+  apt autoremove
+  
   # install some package
-  apt-get install -y iptables iptables-persistent fail2ban unzip ntp htop zsh git-core software-properties-common
+  apt-get install -y iptables iptables-persistent unzip ntp htop zsh git-core software-properties-common
   # install libstdc++-7-dev
   add-apt-repository ppa:ubuntu-toolchain-r/test
-  apt-get update -y
+  apt-get update && apt-get upgrade -y
   apt-get install libstdc++-7-dev
   
   # update & upgrade again
-  apt-get update -y
-  apt-get upgrade
+  apt-get update && apt-get upgrade -y
   # The following packages were automatically installed and are no longer required
   # apt autoremove linux-headers-4.4.0-87 linux-headers-4.4.0-87-generic linux-image-4.4.0-87-generic linux-image-extra-4.4.0-87-generic
   echo "Finished package_tunning"
