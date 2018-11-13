@@ -126,7 +126,6 @@ cd ${BUILD_HOME}/nginx-${NGINX_VERSION}
 --with-http_v2_module \
 --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
 --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
---with-ipv6 \
 --with-debug \
 --with-openssl=$BUILD_HOME/openssl-${OPENSSL_VERSION} \
 --add-module=$BUILD_HOME/$nps_dir \
@@ -135,7 +134,7 @@ cd ${BUILD_HOME}/nginx-${NGINX_VERSION}
 echo -e "$GREEN Nginx configure finished ! $NO_COLOR"
 
 # Make the package.
-make
+make -j2
 
 echo -e "$GREEN Nginx package make finished ! $NO_COLOR"
 
