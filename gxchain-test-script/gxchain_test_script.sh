@@ -17,6 +17,10 @@ GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
 DATA_DIR=$WORKSPACE_PATH/testnet_node
 PROGRAMS_DIR=$WORKSPACE_PATH/programs
 
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+NO_COLOR="\033[0m"
+
 install(){
 	echo "Starting GXChain install ... "
 	
@@ -32,7 +36,7 @@ install(){
 	# download testnet genesis.json
 	wget http://gxb-package.oss-cn-hangzhou.aliyuncs.com/gxb-core/genesis/testnet-genesis.json -O $GENESIS_FILE_PATH
 
-	echo "GXChain install Finished ! "
+	echo -e "$GREEN GXChain install Finished. $NO_COLOR"
 
 	return 0
 }
@@ -58,7 +62,7 @@ gen_config(){
 	sed -ri "s/#\s+seed-nodes\s+=/seed-nodes=${SEED_NODES}/g;" $DATA_DIR/config.ini
 	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint=${RPC_ENDPOINT}/g;" $DATA_DIR/config.ini
 
-	echo "Generate config.ini Finished ! "
+	echo -e "$GREEN Generate config.ini Finished. $NO_COLOR"
 
 	return 0
 }
