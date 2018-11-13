@@ -1,22 +1,39 @@
 # Nginx优化配置
 
+
+
+## 前言
+
+
+
+
+
 ## 安装
 
 ### 脚本下载
 
 ```shell
-$ wget https://raw.githubusercontent.com/gxcdac/gxchain-script/master/nginx-script/nginx-compile.sh
-$ chmod +x nginx-compile.sh
+$ cd ~
+$ git clone git@github.com:gxcdac/gxchain-script.git
+$ chmod +x ~/gxchain-script/nginx-script/nginx-compile.sh
+$ chmod +x ~/gxchain-script/nginx-script/nginx-install.sh
 ```
 
 ### 参数配置
 
-根据自己的需要设置以下几个参数：
+配置脚本：`~/gxchain-script/nginx-script/nginx-install.sh`，例如：
+
+```shell
+#设置Nginx脚本目录
+NGINX_SCRIPT_HOME="/home/gxcchainuser/gxchain-script/nginx-script/"
+```
+
+配置脚本：`~/gxchain-script/nginx-script/nginx-compile.sh`，例如：
 
 ```shell
 # 设置Nginx编译构建的目录
-BUILD_HOME="/mydata/source/"
-# 要下载Nginx版本
+BUILD_HOME="/home/gxcchainuser/compile/"
+# 配置Nginx最新stable版本
 NGINX_VERSION='1.14.1'
 
 # 修改Nginx源码，对Nginx的名称和版本进行混淆
@@ -26,9 +43,23 @@ MIX_NGINX_VERSION='1.2.3'
 
 ### 编译安装
 
+如果不想自己编译Nginx源码
+
 ```shell
-$ sudo ./nginx-compile.sh
+$ sudo ./nginx-install.sh compile
 ```
+
+
+
+```shell
+$ sudo ./nginx-install.sh install
+```
+
+
+
+
+
+
 
 ### 检查
 

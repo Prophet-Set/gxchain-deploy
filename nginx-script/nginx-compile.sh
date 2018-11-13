@@ -8,7 +8,7 @@
 #------------------------------------------------------
 
 # config build home
-BUILD_HOME="/mydata/source/"
+BUILD_HOME="/home/gxcchainuser/compile/"
 # http://nginx.org/en/download.html
 NGINX_VERSION='1.14.1'
 
