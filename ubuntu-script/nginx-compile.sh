@@ -14,8 +14,8 @@ NGINX_VERSION='1.14.1'
 NPS_VERSION='1.13.35.1-beta'
 
 # mix nginx name and version
-MIX_NGINX_NAME='Apache'
-MIX_NGINX_VERSION='2.4.37'
+MIX_NGINX_NAME='MyServer'
+MIX_NGINX_VERSION='1.2.3'
 
 # Install dependencies
 # 
@@ -23,7 +23,7 @@ MIX_NGINX_VERSION='2.4.37'
 # * libpcre3, libpcre3-dev: required for HTTP rewrite module
 # * zlib1g zlib1g-dbg zlib1g-dev: required for HTTP gzip module
 echo "Install dependencies"
-apt-get install checkinstall libpcre3 libpcre3-dev zlib1g zlib1g-dbg zlib1g-dev
+apt-get install checkinstall libpcre3 libpcre3-dev zlib1g zlib1g-dbg zlib1g-dev uuid-dev
 
 # create build home
 if [[ ! -d ${BUILD_HOME} ]]; then
@@ -78,6 +78,7 @@ tar zxf nginx-${NGINX_VERSION}.tar.gz
 echo "Start modify nginx name and version info."
 # modify nginx.h to mix version
 sed -ri "s/#define\s+NGINX_VERSION\s+\"${NGINX_VERSION}\"/#define NGINX_VERSION      \"${MIX_NGINX_VERSION}\"/g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/core/nginx.h
+sed -ri "s/#define\s+NGINX_VER\s+\"nginx\/\" NGINX_VERSION/#define NGINX_VER          \"${MIX_NGINX_NAME}\/\" NGINX_VERSION /g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/core/nginx.h
 # modify ngx_http_header_filter_module.c to mix name
 sed -ri "s/static\s+u_char\s+ngx_http_server_string\[\]\s+=\s+\"Server: nginx\" CRLF;/static u_char ngx_http_server_string\[\] = \"Server: ${MIX_NGINX_NAME}\" CRLF;/g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/http/ngx_http_header_filter_module.c
 
