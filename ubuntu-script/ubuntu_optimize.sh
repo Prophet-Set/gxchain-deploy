@@ -169,20 +169,17 @@ package_tunning(){
 
   # update & upgrade
   apt-get update && apt-get upgrade -y
-  apt autoremove
+  add-apt-repository ppa:ubuntu-toolchain-r/test
   
   # install some package
-  apt-get install -y iptables iptables-persistent unzip ntp htop zsh git-core software-properties-common
-  # install libstdc++-7-dev
-  add-apt-repository ppa:ubuntu-toolchain-r/test
-  apt-get update && apt-get upgrade -y
-  apt-get install libstdc++-7-dev
-  
+  apt-get install -y iptables iptables-persistent unzip ntp htop git-core software-properties-common libstdc++-7-dev
   # update & upgrade again
   apt-get update && apt-get upgrade -y
   # The following packages were automatically installed and are no longer required
   # apt autoremove linux-headers-4.4.0-87 linux-headers-4.4.0-87-generic linux-image-4.4.0-87-generic linux-image-extra-4.4.0-87-generic
+  apt-get autoremove
   echo "Finished package_tunning"
+  
 }
 
 base_system_tunning(){
