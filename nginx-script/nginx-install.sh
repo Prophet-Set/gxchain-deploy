@@ -268,7 +268,7 @@ config(){
         echo -e "systemctl start nginx\nexit 0" >> /etc/rc.local
   	fi
 	echo -e "$GREEN Nginx startup service config finished ! $NO_COLOR"
-    return 0
+        return 0
 }
 
 certbot(){
@@ -287,15 +287,13 @@ certbot(){
 	
 	# auto certbot renew config
 	if [ ! -f "/etc/cron.daily/certbot" ]; then
-		touch "/etc/cron.daily/certbot"
-		chmod +x "/etc/cron.daily/certbot"
+	   touch "/etc/cron.daily/certbot"
+	   chmod +x "/etc/cron.daily/certbot"
 	fi
 	line="#!/bin/bash\ncertbot renew --post-hook \"systemctl reload nginx\""
-    #echo new cron into cron file
-    echo -e "$line" > "/etc/cron.daily/certbot"
-
+        #echo new cron into cron file
+        echo -e "$line" > "/etc/cron.daily/certbot"
 	echo -e "$GREEN Nginx SSL cert config finished ! $NO_COLOR"
-
 	return 0
 }
 
