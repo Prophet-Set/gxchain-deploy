@@ -147,14 +147,14 @@ compile(){
 	--build=Ubuntu \
 	--with-openssl=$BUILD_HOME/openssl-${OPENSSL_VERSION} \
 	--with-openssl-opt=enable-ec_nistp_64_gcc_128 \
-    --with-openssl-opt=no-nextprotoneg \
-    --with-openssl-opt=no-weak-ssl-ciphers \
-    --with-openssl-opt=no-ssl3 \
-    --with-pcre=$BUILD_HOME/pcre-$PCRE_VERSION \
-    --with-pcre-jit \
-    --with-zlib=$BUILD_HOME/zlib-$ZLIB_VERSION \
-    --with-zlib-asm=cpu \
-    --with-compat \
+    	--with-openssl-opt=no-nextprotoneg \
+    	--with-openssl-opt=no-weak-ssl-ciphers \
+    	--with-openssl-opt=no-ssl3 \
+    	--with-pcre=$BUILD_HOME/pcre-$PCRE_VERSION \
+    	--with-pcre-jit \
+    	--with-zlib=$BUILD_HOME/zlib-$ZLIB_VERSION \
+    	--with-zlib-asm=cpu \
+    	--with-compat \
 	--with-http_ssl_module \
 	--with-http_slice_module \
 	--with-http_realip_module \
@@ -180,9 +180,9 @@ compile(){
 	--with-file-aio \
 	--with-threads \
 	--with-http_v2_module \
-    --with-debug \
-    --with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' \
-    --with-ld-opt='-Wl,-Bsymbolic-functions -fPIE -pie -Wl,-z,relro -Wl,-z,now' \
+    	--with-debug \
+    	--with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' \
+    	--with-ld-opt='-Wl,-Bsymbolic-functions -fPIE -pie -Wl,-z,relro -Wl,-z,now' \
 	--add-module=$BUILD_HOME/$nps_dir \
 	--add-module=$BUILD_HOME/ngx_cache_purge
 
@@ -260,11 +260,11 @@ config(){
 	# auto startup on server boot
 	grep 'systemctl start nginx' /etc/rc.local &> /dev/null
   	if [ $? != 0 ] ; then
-      sed -i '/exit\s0/d' /etc/rc.local
-      echo -e "systemctl start nginx\nexit 0" >> /etc/rc.local
-    fi
-    echo -e "$GREEN Nginx startup service config finished ! $NO_COLOR"
-    return 0
+      	   sed -i '/exit\s0/d' /etc/rc.local
+           echo -e "systemctl start nginx\nexit 0" >> /etc/rc.local
+	fi
+	echo -e "$GREEN Nginx startup service config finished ! $NO_COLOR"
+        return 0
 }
 
 certbot(){
