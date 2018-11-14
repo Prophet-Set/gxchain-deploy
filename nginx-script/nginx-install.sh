@@ -268,7 +268,7 @@ config(){
         echo -e "systemctl start nginx\nexit 0" >> /etc/rc.local
   	fi
 	echo -e "$GREEN Nginx startup service config finished ! $NO_COLOR"
-        return 0
+    return 0
 }
 
 certbot(){
@@ -330,7 +330,13 @@ findtime = 600
 bantime = 7200
 maxretry = 10" > /etc/fail2ban/jail.local
 	
-	service fail2ban restart
+	systemctl restart fail2ban
+
+	# auto startup on server boot
+  	if ! grep 'systemctl start fail2ban' /etc/rc.local &> /dev/null;then 
+  		sed -i '/exit\s0/d' /etc/rc.local
+        echo -e "systemctl start fail2ban\nexit 0" >> /etc/rc.local
+  	fi
 
 	echo -e "$GREEN DDos mitigation config finished ! $NO_COLOR"
 
