@@ -297,15 +297,51 @@ certbot(){
 	return 0
 }
 
-
-protect(){
+mitigation_ddos(){
 	# https://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html
-	# 
 	apt-get install fail2ban
-	
-	
-}
+	if [ ! -f "/etc/fail2ban/filter.d/nginx-req-limit.conf" ]; then
+		touch "/etc/fail2ban/filter.d/nginx-req-limit.conf"
+	fi
+	echo "# Fail2Ban configuration file
+#
+# supports: ngx_http_limit_req_module module
 
+[Definition]
+
+failregex = limiting requests, excess:.* by zone.*client: <HOST>
+
+# Option: ignoreregex
+# Notes.: regex to ignore. If this regex matches, the line is ignored.
+# Values: TEXT
+#
+ignoreregex =" > /etc/fail2ban/filter.d/nginx-req-limit.conf
+	
+	if [ ! -f "/etc/fail2ban/jail.local" ]; then
+		cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+	fi
+	echo "[nginx-req-limit]
+
+enabled = true
+filter = nginx-req-limit
+action = iptables-multiport[name=ReqLimit, port="http,https", protocol=tcp]
+logpath = /var/log/nginx/*error.log
+findtime = 600
+bantime = 7200
+maxretry = 10" > /etc/fail2ban/jail.local
+	
+	service fail2ban restart
+
+	echo -e "$GREEN DDos mitigation config finished ! $NO_COLOR"
+
+	echo "Usage: 
+		1. see fail2ban log            : tail -f /var/log/fail2ban.log
+		2. sedd particular jail status : fail2ban-client status nginx-req-limit
+		3. see fail2ban-server config  : fail2ban-client -d
+		4. see fail2ban filter works   : fail2ban-regex /var/log/nginx/example.com.error.log"
+
+	return 0
+}
 
 case $1 in
 compile)
@@ -323,6 +359,9 @@ config)
 certbot)
   certbot
 ;;
+mitigation_ddos)
+  mitigation_ddos
+;;  
 esac
 exit 0
 

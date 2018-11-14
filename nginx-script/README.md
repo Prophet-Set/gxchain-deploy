@@ -9,6 +9,9 @@
 - 增加了 [incubator-pagespeed-ngx](https://github.com/apache/incubator-pagespeed-ngx) 、[ngx_cache_purge](https://github.com/FRiCKLE/ngx_cache_purge) 等有有用的Nginx module，有助于提升站点的性能。
 - 提供了已经优化过的 `.conf` 配置文件，例如限流处理。
 - 提供SSL证书的部署以及SSL证书的自动更新。
+- 通过fail2ban提供DDos防护处理。
+
+
 
 ## 安装
 
@@ -154,15 +157,77 @@ Nginx SSL cert config finished !
 
 
 
-## 安全配置
+## DDos防御
 
-缓解DDos攻击
+对于Nginx 的DDos防御配置，只能起到缓解攻击的作用，并不能妒忌DDos攻击。
 
+### NGINX 部分
 
+> 该部分配置，已通过命令 `sudo ./nginx-install.sh config` 配置添加到了Nginx中
 
+在 http 部分中配置：
 
+```nginx
+limit_req_zone $binary_remote_addr zone=sym:10m rate=5r/s;
+limit_conn_zone $binary_remote_addr zone=conn_sym:10m;
+```
 
+然后在需要流控的 location 部分配置：
 
+```nginx
+limit_req zone=sym burst=5;
+limit_conn conn_sym 10;
+```
+
+重启 NGINX 后当有超流客户端请求时将在 NGINX error.log（默认在 `/var/log/nginx/error.log`） 中看到类似记录：
+
+```
+2017/02/12 18:03:57 [error]15965#15965: *61240 limiting requests, excess: 6.000 by zone "sym", client: 121.41.106.121, server: hacpai.com, request: "GET / HTTP/1.0", host: "hacpai.com"
+```
+
+此时请求已经被 NGINX 限流，但是客户端仍然能够继续发送请求，占用服务器资源。
+
+### fail2ban
+
+执行命令，安装fail2ban，并配置fail2ban
+
+```powershell
+$ sudo ./nginx-install.sh mitigation_ddos 
+```
+
+查看配置：`/etc/fail2ban/jail.local`，其中这三个参数`findtime`、`bantime`、`maxretry`表示的含义是：
+
+findtime 600 秒内如果有超过 maxretry 10 次匹配到则禁止连接 bantime 7200 秒。禁止连接通过操作 iptables 实现 。（要发送邮件，需要安装配置好 sendmail）
+
+谨慎设置这三个参数。
+
+#### 操作
+
+- 查看超流日志：
+
+  ```powershell
+  $ tail -f /var/log/fail2ban.log
+  
+  ## 类似记录：
+  2017-02-12 18:01:26,968 fail2ban.actions: WARNING [sym-cc] Ban 121.41.106.121
+  2017-02-12 18:01:26,968 fail2ban.actions: WARNING [sym-cc] Ban 121.41.106.121
+  ```
+
+- 查看当前禁止信息：
+
+  ```powershell
+  $ sudo fail2ban-client status
+  
+  或
+  
+  $ sudo fail2ban-client status nginx-req-limit
+  ```
+
+- 查看配置匹配情况：
+
+  ```powershell
+  $ fail2ban-regex /var/log/nginx/error.log /etc/fail2ban/jail.local
+  ```
 
 
 
