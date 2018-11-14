@@ -24,6 +24,9 @@ PCRE_VERSION='8.41'
 # defind zlib version
 ZLIB_VERSION='1.2.11'
 
+# domain list
+DOMAIN_LIST=("example.com" "example.cn" "www.example.com" "www.example.cn")
+
 # mix nginx name and version
 MIX_NGINX_NAME='MyServer'
 MIX_NGINX_VERSION='1.2.3'
@@ -41,7 +44,7 @@ compile(){
 	echo "Install dependencies"
 	apt-get update && apt-get upgrade -y
 	sudo apt autoremove
-	
+
 	# Install dependencies
 	# 
 	# * checkinstall: package the .deb
@@ -209,18 +212,10 @@ install(){
 }
 
 uninstall(){
-	# uninstall .deb package
-	dpkg -l "nginx" &> /dev/null
-	if [ $? = 0 ]; then
-		dpkg -P nginx
-	fi
-
 	# delete user and group
-	grep "$NGINX_USER" /etc/passwd &> /dev/null
-	if [ $? = 0 ] ; then
+	if grep "$NGINX_USER" /etc/passwd &> /dev/null ; then
 	    userdel $NGINX_USER
 	fi
-
 	# rm -rf some nginx files
 	rm -rf /etc/nginx
 	rm -rf /usr/sbin/nginx
@@ -229,58 +224,77 @@ uninstall(){
 	rm -rf /var/cache/nginx
 	rm -rf /usr/lib/nginx
 
+	# uninstall .deb package
+	dpkg -l "nginx" &> /dev/null
+	if [ $? = 0 ]; then
+		dpkg -P nginx
+	fi
 	echo -e "$GREEN Nginx uninstall finished ! $NO_COLOR"
 	return 0
 }
 
 config(){
+	# create user and group
+	if ! grep "$NGINX_USER" /etc/passwd &> /dev/null; then
+	    useradd -s /bin/false $NGINX_USER
+	    echo -e "$GREEN Create nginx user finished ! $NO_COLOR"
+	fi
 	# clean default config files
 	if [ ! -d "$NGINX_HOME/default.d/" ]; then
 		mkdir -p $NGINX_HOME/default.d/
 	fi
-	cp -rp $NGINX_HOME/*.default $NGINX_HOME/default.d/
+	mv $NGINX_HOME/*.default $NGINX_HOME/default.d/
+	mv $NGINX_HOME/nginx.conf $NGINX_HOME/default.d/
+	mv $NGINX_HOME/html $NGINX_HOME/default.d/
 	echo -e "$GREEN Nginx default config files clean finished ! $NO_COLOR"
-
-	# remove .default suffix
 	
-
 	# config nginx
 	cp -rp $NGINX_SCRIPT_HOME/nginx_conf/* $NGINX_HOME
 	# set nginx file permission
 	chmod -R 644 $NGINX_HOME
-	chmod o+x $NGINX_HOME/html
+	chmod 755 $NGINX_HOME/html
+	chown -R root:root $NGINX_HOME
 	echo -e "$GREEN Nginx config files set finished ! $NO_COLOR"
 
 	# config systemctl nginx.service
 	chmod 644 $NGINX_SCRIPT_HOME/nginx.service 
-	mv $NGINX_SCRIPT_HOME/nginx.service /lib/systemd/system/
+	cp $NGINX_SCRIPT_HOME/nginx.service /lib/systemd/system/
 
 	systemctl enable nginx
 
 	# auto startup on server boot
-	grep 'systemctl start nginx' /etc/rc.local &> /dev/null
-  	if [ $? != 0 ] ; then
-      	   sed -i '/exit\s0/d' /etc/rc.local
-           echo -e "systemctl start nginx\nexit 0" >> /etc/rc.local
-	fi
+  	if ! grep 'systemctl start nginx' /etc/rc.local &> /dev/null;then 
+  		sed -i '/exit\s0/d' /etc/rc.local
+        echo -e "systemctl start nginx\nexit 0" >> /etc/rc.local
+  	fi
 	echo -e "$GREEN Nginx startup service config finished ! $NO_COLOR"
-        return 0
+    return 0
 }
 
 certbot(){
 	# install certbot
 	# https://medium.com/@jgefroh/a-guide-to-using-nginx-for-static-websites-d96a9d034940
-	apt-get update
+	# https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04
+	apt-get update && apt-get upgrade -y
 	apt-get install software-properties-common
 	add-apt-repository ppa:certbot/certbot
-	apt-get update
+	apt-get update && apt-get upgrade -y
 	apt-get install python-certbot-nginx 
-
+    
 	# crate certificate for nginx
-	certbot --nginx certonly
+	domains=$(printf "%s -d %s" "${DOMAIN_LIST[@]}")
+	certbot --nginx -d $domains
 	
-	# auto renew config
-	# certbot renew --dry-run
+	# auto certbot renew config
+	if [ ! -f "/etc/cron.daily/certbot" ]; then
+		touch "/etc/cron.daily/certbot"
+		chmod +x "/etc/cron.daily/certbot"
+	fi
+	line="#!/bin/bash\ncertbot renew --post-hook \"systemctl reload nginx\""
+    #echo new cron into cron file
+    echo -e "$line" > "/etc/cron.daily/certbot"
+
+	echo -e "$GREEN Nginx SSL cert config finished ! $NO_COLOR"
 
 	return 0
 }
