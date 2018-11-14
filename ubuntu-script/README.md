@@ -2,7 +2,7 @@
 
 ## 背景
 
-通常来讲，我们在买完云服务器之后，需要修改一些服务器的默认配置。例如，修改hostname、新增普通用户、修改ssh登录配置、更新安装包、磁盘挂载、swap分区配置、防火墙设置、内核安全设置等等一系列措施。这些操作费时费力，还容易出错，弄不好一天就过去了，在搞不好，两天就过去了。
+通常来讲，我们在买完云服务器之后，需要修改一些服务器的默认配置。例如，修改hostname、新增普通用户、配置ssh登录权限、更新安装包、磁盘挂载、swap分区配置、防火墙设置、内核安全设置等等一系列措施。这些操作费时费力，还容易出错，弄不好一天就过去了，再搞不好，两天就过去了。
 
 通过此脚本，则可以分分钟准确地完成以上一系列配置。
 
@@ -56,41 +56,36 @@ base_system_tunning
 disk_dev_tunning
 ```
 
-### 修改脚本默认参数
+### 配置参数
 
-1. 设置新建的普通用户名，例如：
+修改脚本，配置以下参数：
 
-   ```shell
-   MY_NEW_USER='gxchainuser'
-   ```
+```shell
+# 配置新建的普通用户名
+MY_NEW_USER='gxchainuser'
+# 配置ssh端口
+MY_SSH_PORT=41837
+# 配置数据盘路劲
+MY_DATA_DEV='vda1'
+```
 
-2. 设置ssh端口，例如：
-
-   ```shell
-   MY_SSH_PORT=41837
-   ```
-
-3. 设置数据盘
-
-   - 登录服务器，执行命令 `fdisk -l` 查看数据盘的路径，例如为 `/dev/vda1`
-
-     ```shell
-     $ sudo fdisk -l
-     
-     ## 输出如下信息
-     Disk /dev/vda1: 42.9 GB, 42949672960 bytes, 83886080 sectors
-     Units = sectors of 1 * 512 = 512 bytes
-     Sector size (logical/physical): 512 bytes / 512 bytes
-     I/O size (minimum/optimal): 512 bytes / 512 bytes
-     Disk label type: dos
-     Disk identifier: 0x0008d73a
-     ```
-
-   - 则 `MY_DATA_DEV`  配置为 `vda1` ：
-
-     ```shell
-     MY_DATA_DEV='vda1'
-     ```
+> 执行命令 `fdisk -l` 查看服务器数据盘
+>
+> ```powershell
+> $ sudo fdisk -l
+> 
+> ## 输出如下信息
+> Disk /dev/vda1: 42.9 GB, 42949672960 bytes, 83886080 sectors
+> Units = sectors of 1 * 512 = 512 bytes
+> Sector size (logical/physical): 512 bytes / 512 bytes
+> I/O size (minimum/optimal): 512 bytes / 512 bytes
+> Disk label type: dos
+> Disk identifier: 0x0008d73a
+> ```
+>
+> 数据盘路劲为：`/dev/vda1`
+>
+> 则 `MY_DATA_DEV`  配置为 `vda1` 
 
 
 
@@ -131,30 +126,27 @@ disk_dev_tunning
 
 ## 安全
 
-### SSH Key登录配置
+### SSH Key登录
 
 > 根据自己需要，这一步也可以省略
 
 一般我们登录生产机器，会通过跳板机去登录，我们需要在跳板机上生成SSH公私钥，用于登录生产机器
 
-1. 登录跳板机。
+1. 登录跳板机，生成ssh key，可以修改后面的备注remark。
 
-2. 生成ssh key，可以修改后面的备注remark。
-
-   ```shell
+   ```powershell
    $ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_aws_$(date +%Y-%m-%d) -C "remark"
    ```
 
-3. 安装ssh public key，将上一步生成的ssh public key安装到指定的生产机上。
+2. 安装ssh public key，将上一步生成的ssh public key安装到指定的生产机上。
 
    > 替换`.pub`文件名、`user`和`remote-server-ip`
 
-   ```shell
+   ```powershell
    $ ssh-copy-id -i id_rsa_aws_2015-03-04.pub user@remote-server-ip
    ```
 
-4. 使用新生成的ssh key 登录生产机，并再次优化sshd_config配置，强制关闭密码登录，强制开启pubkey登录
-
+3. 使用新生成的ssh key 登录生产机，并再次优化sshd_config配置，强制关闭密码登录，强制开启pubkey登录
    1. 使用ssh key登录，例如：
 
       ```shell
@@ -173,8 +165,6 @@ disk_dev_tunning
       
       service sshd restart
       ```
-
-
 
 ### 防火墙设置
 
@@ -235,8 +225,8 @@ for port3 in $PORTS3;do iptables -A OUTPUT -p tcp -m state --state NEW --dport $
 
 必须要以root的权限进行运行
 
-```shell
-./ubuntu_firewall.sh
+```powershell
+# ./ubuntu_firewall.sh
 ```
 
 
