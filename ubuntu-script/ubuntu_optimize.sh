@@ -236,13 +236,25 @@ export LC_ALL=en_US.UTF-8
   else
     sed -i s/"kernel.exec-shield = [0-9]*"/"kernel.exec-shield = 1"/ /etc/sysctl.conf
   fi
-
   grep 'kernel.randomize_va_space' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
-    echo "# Turn on execshield " >> /etc/sysctl.conf
     echo "kernel.randomize_va_space = 1" >> /etc/sysctl.conf
   else
     sed -i s/"kernel.randomize_va_space = [0-9]*"/"kernel.randomize_va_space = 1"/ /etc/sysctl.conf
+  fi
+
+  grep 'net.core.rmem_max' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "# Increase Linux auto tuning TCP buffer limits min, default, and max number of bytes to use set max to at least 4MB, or higher if you use very high BDP paths " >> /etc/sysctl.conf
+    echo "net.core.rmem_max = 8388608" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.core.rmem_max = [0-9]*"/"net.core.rmem_max = 8388608"/ /etc/sysctl.conf
+  fi
+  grep 'net.core.wmem_max' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.core.wmem_max = 8388608" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.core.wmem_max = [0-9]*"/"net.core.wmem_max = 8388608"/ /etc/sysctl.conf
   fi
 
   grep 'net.core.netdev_max_backlog' /etc/sysctl.conf &> /dev/null
@@ -259,6 +271,7 @@ export LC_ALL=en_US.UTF-8
     sed -i s/"net.core.somaxconn = [0-9]*"/"net.core.somaxconn = 32768"/ /etc/sysctl.conf
   fi
 
+  # Tuen IPv4.
   grep 'net.ipv4.icmp_ratelimit' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
     echo "# Default value is 100; we relax this to limit it to 5 per second." >> /etc/sysctl.conf
@@ -277,7 +290,7 @@ export LC_ALL=en_US.UTF-8
 
   grep 'net.ipv4.icmp_echo_ignore_broadcasts' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
-    echo "# Ignore bad ICMP" >> /etc/sysctl.conf
+    echo "# Ignore bad ICMP, Avoid a smurf attack" >> /etc/sysctl.conf
     echo "net.ipv4.icmp_echo_ignore_broadcasts = 1" >> /etc/sysctl.conf
   else
     sed -i s/"net.ipv4.icmp_echo_ignore_broadcasts = [0-9]*"/"net.ipv4.icmp_echo_ignore_broadcasts = 1"/ /etc/sysctl.conf
@@ -285,18 +298,35 @@ export LC_ALL=en_US.UTF-8
 
   grep 'net.ipv4.icmp_ignore_bogus_error_responses' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
-    echo "# Some routers ignore RFC 1122 and send junk error responses that get logged. It may be possible to trigger this logging by spoofing; this would lead to filling up the hard disk with junk logs, causing a denial of service." >> /etc/sysctl.conf
+    echo "# Turn on protection for bad icmp error messages. " >> /etc/sysctl.conf
     echo "net.ipv4.icmp_ignore_bogus_error_responses = 1" >> /etc/sysctl.conf
   else
     sed -i s/"net.ipv4.icmp_ignore_bogus_error_responses = [0-9]*"/"net.ipv4.icmp_ignore_bogus_error_responses = 1"/ /etc/sysctl.conf
   fi
-
   grep 'net.ipv4.conf.all.accept_redirects' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
-    echo "# Disable ICMP Redirect Acceptance" >> /etc/sysctl.conf
+    echo "# Disable ICMP Redirect Acceptance, make sure no one can alter the routing tables" >> /etc/sysctl.conf
     echo "net.ipv4.conf.all.accept_redirects = 0" >> /etc/sysctl.conf
   else
     sed -i s/"net.ipv4.conf.all.accept_redirects = [0-9]*"/"net.ipv4.conf.all.accept_redirects = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv4.conf.default.accept_redirects' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.default.accept_redirects = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.default.accept_redirects = [0-9]*"/"net.ipv4.conf.default.accept_redirects = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv4.conf.all.secure_redirects' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.all.secure_redirects = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.all.secure_redirects = [0-9]*"/"net.ipv4.conf.all.secure_redirects = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv4.conf.default.secure_redirects' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.default.secure_redirects = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.default.secure_redirects = [0-9]*"/"net.ipv4.conf.default.secure_redirects = 0"/ /etc/sysctl.conf
   fi
 
   grep 'net.ipv4.conf.all.accept_source_route' /etc/sysctl.conf &> /dev/null
@@ -306,23 +336,40 @@ export LC_ALL=en_US.UTF-8
   else
     sed -i s/"net.ipv4.conf.all.accept_source_route = [0-9]*"/"net.ipv4.conf.all.accept_source_route = 0"/ /etc/sysctl.conf
   fi
+  grep 'net.ipv4.conf.default.accept_source_route' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.default.accept_source_route = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.default.accept_source_route = [0-9]*"/"net.ipv4.conf.default.accept_source_route = 0"/ /etc/sysctl.conf
+  fi
 
   grep 'net.ipv4.conf.all.rp_filter' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
     echo "# Enable IP spoofing protection, turn on source route verification" >> /etc/sysctl.conf
-    echo "net.ipv4.conf.all.rp_filter = 0" >> /etc/sysctl.conf
+    echo "net.ipv4.conf.all.rp_filter = 1" >> /etc/sysctl.conf
   else
     sed -i s/"net.ipv4.conf.all.rp_filter = [0-9]*"/"net.ipv4.conf.all.rp_filter = 1"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv4.conf.default.rp_filter' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.default.rp_filter = 1" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.default.rp_filter = [0-9]*"/"net.ipv4.conf.default.rp_filter = 1"/ /etc/sysctl.conf
   fi
 
   grep 'net.ipv4.conf.all.log_martians' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
-    echo "# Log Spoofed Packets, Source Routed Packets, Redirect Packets" >> /etc/sysctl.conf
+    echo "# Turn on and log spoofed, source routed, and redirect packets" >> /etc/sysctl.conf
     echo "net.ipv4.conf.all.log_martians = 1" >> /etc/sysctl.conf
   else
     sed -i s/"net.ipv4.conf.all.log_martians = [0-9]*"/"net.ipv4.conf.all.log_martians = 1"/ /etc/sysctl.conf
   fi
-
+  grep 'net.ipv4.conf.default.log_martians' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.default.log_martians = 1" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.default.log_martians = [0-9]*"/"net.ipv4.conf.default.log_martians = 1"/ /etc/sysctl.conf
+  fi
   grep 'net.ipv4.conf.all.arp_announce' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
     echo "# Reply to ARPs only from correct interface (required for DSR load-balancers)" >> /etc/sysctl.conf
@@ -338,17 +385,29 @@ export LC_ALL=en_US.UTF-8
     sed -i s/"net.ipv4.conf.all.arp_ignore = [0-9]*"/"net.ipv4.conf.all.arp_ignore = 1"/ /etc/sysctl.conf
   fi
 
-  grep 'fs.file-max' /etc/sysctl.conf &> /dev/null
+  grep 'net.ipv4.ip_forward' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
-    echo "# limit set in the kernel on how many open file descriptors are allowed on the system"
-    echo "fs.file-max = 1024000" >> /etc/sysctl.conf
+    echo "# Don't act as a router" >> /etc/sysctl.conf
+    echo "net.ipv4.ip_forward = 0" >> /etc/sysctl.conf
   else
-    sed -i s/"fs.file-max = [0-9]*"/"fs.file-max = 1024000"/ /etc/sysctl.conf
+    sed -i s/"net.ipv4.ip_forward = [0-9]*"/"net.ipv4.ip_forward = 0"/ /etc/sysctl.conf
   fi
-
+  grep 'net.ipv4.conf.all.send_redirects' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.all.send_redirects = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.all.send_redirects = [0-9]*"/"net.ipv4.conf.all.send_redirects = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv4.conf.default.send_redirects' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.conf.default.send_redirects = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.conf.default.send_redirects = [0-9]*"/"net.ipv4.conf.default.send_redirects = 0"/ /etc/sysctl.conf
+  fi
+  
   grep 'net.ipv4.tcp_syncookies' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
-    echo "# Implements TCP Syncookies. Syncookies make SYN flood attacks ineffective" >> /etc/sysctl.conf
+    echo "# Turn on syncookies for SYN flood attack protection" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_syncookies = 1" >> /etc/sysctl.conf
   else
     sed -i s/"net.ipv4.tcp_syncookies = [0-9]*"/"net.ipv4.tcp_syncookies = 1"/ /etc/sysctl.conf
@@ -433,6 +492,87 @@ export LC_ALL=en_US.UTF-8
     sed -i s/"net.ipv4.tcp_fin_timeout = [0-9]*"/"net.ipv4.tcp_fin_timeout = 30"/ /etc/sysctl.conf
   fi
 
+  grep 'net.ipv4.tcp_rmem' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "# Increase TCP max buffer size setable using setsockopt() " >> /etc/sysctl.conf
+    echo "net.ipv4.tcp_rmem = 4096 87380 8388608" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.tcp_rmem = .*"/"net.ipv4.tcp_rmem = 4096 87380 8388608"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv4.tcp_wmem' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv4.tcp_wmem = 4096 87380 8388608 " >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.tcp_wmem = .*"/"net.ipv4.tcp_wmem = 4096 87380 8388608 "/ /etc/sysctl.conf
+  fi
+
+  grep 'fs.file-max' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "# Increase system file descriptor limit " >> /etc/sysctl.conf
+    echo "fs.file-max = 1024000" >> /etc/sysctl.conf
+  else
+    sed -i s/"fs.file-max = [0-9]*"/"fs.file-max = 1024000"/ /etc/sysctl.conf
+  fi
+  grep 'kernel.pid_max' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "# Allow for more PIDs (to reduce rollover problems); may break some programs 32768" >> /etc/sysctl.conf
+    echo "kernel.pid_max = 65536" >> /etc/sysctl.conf
+  else
+    sed -i s/"kernel.pid_max = [0-9]*"/"kernel.pid_max = 65536"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv4.ip_local_port_range' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "# Increase system IP port limits " >> /etc/sysctl.conf
+    echo "net.ipv4.ip_local_port_range = 1024 65535" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv4.ip_local_port_range = .*"/"net.ipv4.ip_local_port_range = 1024 65535"/ /etc/sysctl.conf
+  fi
+
+  # Tuen IPv6.
+  grep 'net.ipv6.conf.default.router_solicitations' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "# Tuen IPv6. " >> /etc/sysctl.conf
+    echo "net.ipv6.conf.default.router_solicitations = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv6.conf.default.router_solicitations = [0-9]*"/"net.ipv6.conf.default.router_solicitations = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv6.conf.default.accept_ra_rtr_pref' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv6.conf.default.accept_ra_rtr_pref = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv6.conf.default.accept_ra_rtr_pref = [0-9]*"/"net.ipv6.conf.default.accept_ra_rtr_pref = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv6.conf.default.accept_ra_pinfo' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv6.conf.default.accept_ra_pinfo = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv6.conf.default.accept_ra_pinfo = [0-9]*"/"net.ipv6.conf.default.accept_ra_pinfo = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv6.conf.default.accept_ra_defrtr' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv6.conf.default.accept_ra_defrtr = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv6.conf.default.accept_ra_defrtr = [0-9]*"/"net.ipv6.conf.default.accept_ra_defrtr = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv6.conf.default.autoconf' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv6.conf.default.autoconf = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv6.conf.default.autoconf = [0-9]*"/"net.ipv6.conf.default.autoconf = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv6.conf.default.dad_transmits' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv6.conf.default.dad_transmits = 0" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv6.conf.default.dad_transmits = [0-9]*"/"net.ipv6.conf.default.dad_transmits = 0"/ /etc/sysctl.conf
+  fi
+  grep 'net.ipv6.conf.default.max_addresses' /etc/sysctl.conf &> /dev/null
+  if [ $? != 0 ] ; then
+    echo "net.ipv6.conf.default.max_addresses = 1" >> /etc/sysctl.conf
+  else
+    sed -i s/"net.ipv6.conf.default.max_addresses = [0-9]*"/"net.ipv6.conf.default.max_addresses = 1"/ /etc/sysctl.conf
+  fi
+
   grep 'net.netfilter.nf_conntrack_tcp_timeout_time_wait' /etc/sysctl.conf &> /dev/null
   if [ $? != 0 ] ; then
     echo "net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30" >> /etc/sysctl.conf
@@ -445,13 +585,6 @@ export LC_ALL=en_US.UTF-8
     echo "vm.swappiness = 0" >> /etc/sysctl.conf
   else
     sed -i s/"vm.swappiness = [0-9]*"/"vm.swappiness = 0"/ /etc/sysctl.conf
-  fi
-
-  grep 'net.ipv4.ip_local_port_range' /etc/sysctl.conf &> /dev/null
-  if [ $? != 0 ] ; then
-    echo "net.ipv4.ip_local_port_range = 1024  65535" >> /etc/sysctl.conf
-  else
-    sed -i s/"net.ipv4.ip_local_port_range = .*"/"net.ipv4.ip_local_port_range = 1024  65535"/ /etc/sysctl.conf
   fi
   
   grep 'net.nf_conntrack_max' /etc/sysctl.conf &> /dev/null
