@@ -37,20 +37,19 @@ GREEN="\033[0;32m"
 NO_COLOR="\033[0m"
 
 compile(){
+	
+	echo "Install dependencies"
+	apt-get update && apt-get upgrade -y
+	sudo apt autoremove
+	
 	# Install dependencies
 	# 
 	# * checkinstall: package the .deb
 	# * libpcre3, libpcre3-dev: required for HTTP rewrite module
 	# * zlib1g zlib1g-dbg zlib1g-dev: required for HTTP gzip module
-	echo "Install dependencies"
-	apt-get update && apt-get upgrade -y
-	sudo apt autoremove
-	apt-get update && apt-get upgrade -y
+	# apt-get install openssl libssl-dev libperl-dev libpcre3 libpcre3-dev zlib1g zlib1g-dbg zlib1g-dev libxslt1-dev libxml2-dev
+	apt-get install checkinstall build-essential libgeoip-dev uuid-dev libgd2-xpm-dev libgoogle-perftools-dev
 
-	# apt-get install checkinstall openssl libssl-dev libperl-dev libpcre3 libpcre3-dev 
-	# zlib1g zlib1g-dbg zlib1g-dev uuid-dev build-essential libgeoip-dev
-	apt-get install checkinstall build-essential libgeoip-dev
-	
 	# create build home
 	if [ ! -d ${BUILD_HOME} ]; then
 	   echo "create build home"
@@ -180,9 +179,10 @@ compile(){
 	--with-file-aio \
 	--with-threads \
 	--with-http_v2_module \
+	--with-google_perftools_module \
     	--with-debug \
-    	--with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' \
-    	--with-ld-opt='-Wl,-Bsymbolic-functions -fPIE -pie -Wl,-z,relro -Wl,-z,now' \
+    	--with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
+        --with-ld-opt='-Wl,-z,relro -Wl,--as-needed' \
 	--add-module=$BUILD_HOME/$nps_dir \
 	--add-module=$BUILD_HOME/ngx_cache_purge
 
