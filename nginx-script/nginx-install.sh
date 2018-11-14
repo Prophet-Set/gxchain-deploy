@@ -47,10 +47,10 @@ compile(){
 	sudo apt autoremove
 	apt-get update && apt-get upgrade -y
 
-	apt-get install checkinstall libpcre3 libpcre3-dev zlib1g zlib1g-dbg zlib1g-dev uuid-dev build-essential libgeoip-dev
-
-	# openssl libssl-dev libperl-dev
-
+	# apt-get install checkinstall openssl libssl-dev libperl-dev libpcre3 libpcre3-dev 
+	# zlib1g zlib1g-dbg zlib1g-dev uuid-dev build-essential libgeoip-dev
+	apt-get install checkinstall build-essential libgeoip-dev
+	
 	# create build home
 	if [ ! -d ${BUILD_HOME} ]; then
 	   echo "create build home"
@@ -120,6 +120,7 @@ compile(){
 	# 
 	# http://nginx.org/en/docs/configure.html
 	# https://www.vultr.com/docs/how-to-compile-nginx-from-source-on-ubuntu-16-04
+	# https://gist.github.com/tollmanz/8662688
 	#
 	# This is based on the default package in Debian. Additional flags have
 	# been added:
@@ -144,21 +145,32 @@ compile(){
 	--user=$NGINX_USER \
 	--group=$NGINX_GROUP \
 	--build=Ubuntu \
+	--with-openssl=$BUILD_HOME/openssl-${OPENSSL_VERSION} \
+	--with-openssl-opt=enable-ec_nistp_64_gcc_128 \
+    --with-openssl-opt=no-nextprotoneg \
+    --with-openssl-opt=no-weak-ssl-ciphers \
+    --with-openssl-opt=no-ssl3 \
+    --with-pcre=$BUILD_HOME/pcre-$PCRE_VERSION \
+    --with-pcre-jit \
+    --with-zlib=$BUILD_HOME/zlib-$ZLIB_VERSION \
+    --with-zlib-asm=cpu \
+    --with-compat \
 	--with-http_ssl_module \
 	--with-http_slice_module \
 	--with-http_realip_module \
 	--with-http_addition_module \
-	--with-http_auth_request_module \
 	--with-http_sub_module \
 	--with-http_dav_module \
 	--with-http_flv_module \
 	--with-http_mp4_module \
 	--with-http_gunzip_module \
 	--with-http_gzip_static_module \
+	--with-http_auth_request_module \
 	--with-http_random_index_module \
 	--with-http_secure_link_module \
 	--with-http_stub_status_module \
 	--with-http_geoip_module \
+	--with-http_image_filter_module \
 	--with-mail \
 	--with-mail_ssl_module \
 	--with-stream \
@@ -168,18 +180,9 @@ compile(){
 	--with-file-aio \
 	--with-threads \
 	--with-http_v2_module \
-	--with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' \
+    --with-debug \
+    --with-cc-opt='-g -O2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' \
     --with-ld-opt='-Wl,-Bsymbolic-functions -fPIE -pie -Wl,-z,relro -Wl,-z,now' \
-	--with-debug \
-	--with-openssl=$BUILD_HOME/openssl-${OPENSSL_VERSION} \
-	--with-openssl-opt=enable-ec_nistp_64_gcc_128 \
-    --with-openssl-opt=no-nextprotoneg \
-    --with-openssl-opt=no-weak-ssl-ciphers \
-    --with-openssl-opt=no-ssl3 \
-    --with-pcre=$BUILD_HOME/pcre-$PCRE_VERSION \
-    --with-pcre-jit \
-    --with-zlib=$BUILD_HOME/zlib-$ZLIB_VERSION \
-    --with-compat \
 	--add-module=$BUILD_HOME/$nps_dir \
 	--add-module=$BUILD_HOME/ngx_cache_purge
 

@@ -4,8 +4,6 @@
 
 一般说来，我们使用 `apt-get install nginx` 就可以非常简单方便地安装Nginx。
 
-
-
 ## 安装
 
 ### 脚本下载
@@ -72,7 +70,7 @@ Setting up nginx (1.14.1-1) ...
 
 ```powershell
 # 版本检查
-$ nginx -v
+$ sudo nginx -v && sudo nginx -V
 
 nginx version: MyServer/1.2.3 (Ubuntu)
 ```
@@ -87,7 +85,7 @@ Nginx uninstall finished !
 
 
 
-## 配置
+## 基础配置
 
 ### Nginx配置
 
@@ -97,53 +95,17 @@ Nginx uninstall finished !
 $ sudo ./nginx-install.sh config
 ```
 
-
-
 ### SSL配置
 
-
-
-### 配置文件
-
-### HTTPS配置
-
-> https://www.linode.com/docs/security/ssl/install-lets-encrypt-to-create-ssl-certificates/
-
-
+```
+$ sudo ./nginx-install.sh certbot
+```
 
 
 
 ## 安全配置
 
 DDos攻击防护
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
