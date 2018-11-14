@@ -2,7 +2,13 @@
 
 ## 前言
 
-一般说来，我们使用 `apt-get install nginx` 就可以非常简单方便地安装Nginx。
+对于Nginx的部署，你可以使用`apt-get`的方式来进行安装，也可以使用我们提供的脚本来进行安装。
+
+对于比原生的安装方式，我们的脚本有以下几点优势：
+
+- 增加了 [incubator-pagespeed-ngx](https://github.com/apache/incubator-pagespeed-ngx) 、[ngx_cache_purge](https://github.com/FRiCKLE/ngx_cache_purge) 等有有用的Nginx module，有助于提升站点的性能。
+- 提供了已经优化过的 `.conf` 配置文件，例如限流处理。
+- 提供SSL证书的部署以及SSL证书的自动更新。
 
 ## 安装
 
@@ -52,10 +58,12 @@ $ sudo ./nginx-install.sh compile
  Nginx .deb package create finished !
 ```
 
-如果不想自己手动编译或中途出现了一些问题，可以直接选择安装我们已经编译好的`.deb`安装包：
+如果不想自己手动编译，可以直接选择安装我们已经编译好的`.deb`安装包：
 
 ```powershell
 $ wget https://github.com/gxcdac/gxchain-script/raw/master/nginx-script/release/nginx_1.15.6-1_amd64.deb
+
+$ sudo dpkg -i nginx_1.15.6-1_amd64.deb
 ```
 
 ### 安装
@@ -91,9 +99,9 @@ configure arguments: --prefix=/etc/nginx/  ... ...
 
 
 
-## 基础配置
+## Nginx配置
 
-### Nginx配置
+### conf配置
 
 替换掉Nginx默认的配置文件，使用我们优化过的配置文件：
 
@@ -128,7 +136,7 @@ DOMAIN_LIST=("example.com" "example.cn" "www.example.com" "www.example.cn")
 
 > 注意：确保域名已做过DNS解析和域名解析，并能够正常访问，否则 SSL 证书会生成失败
 
-确保Nginx处于运行状态，启动Nginx：
+启动Nginx，确保Nginx处于运行状态：
 
 ```powershell
 $ sudo systemctl start nginx
@@ -142,7 +150,7 @@ $ sudo ./nginx-install.sh certbot
 Nginx SSL cert config finished !
 ```
 
-> 这些域名的SSL证书，每天会定时renew.
+> 脚本添加了定期更新任务，域名的SSL证书，每天会定时更新。
 
 
 
@@ -161,22 +169,3 @@ Nginx SSL cert config finished !
 ## 问题
 
 - 如果服务器是在国内，在执行nginx编译的过程中，可能会发生有部分github上的tar包下载超时的情况，鉴于这种情况请直接安装我们已经编译好的`.deb`包。
-
-
-
-## 参考资料
-
-- https://www.vultr.com/docs/how-to-compile-nginx-from-source-on-ubuntu-16-04
-- https://www.globalsign.com/en/blog/how-to-prevent-a-ddos-attack-on-a-cloud-server/
-- https://www.digitalocean.com/community/tutorials/how-to-protect-an-nginx-server-with-fail2ban-on-ubuntu-14-04
-- https://easyengine.io/tutorials/nginx/fail2ban/
-- https://www.searchenginebay.com/protect-nginx-server-fail2ban-ubuntu/
-- https://gist.github.com/Telling/7fd4bc5ee4caaff88f4b
-- http://teition.com/fighting-a-ddos-attack-limiting-requests-in-nginx/
-- https://github.com/karek314/ddos-deflate-nginx-cloudflare
-- https://www.nginx.com/blog/mitigating-ddos-attacks-with-nginx-and-nginx-plus/
-- https://www.nginx.com/blog/rate-limiting-nginx/
-- https://github.com/matsumotory/http-dos-detector
-
-
-

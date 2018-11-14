@@ -110,8 +110,8 @@ compile(){
 	echo "Download nginx-${NGINX_VERSION} source file "
 	wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && tar -xzvf nginx-${NGINX_VERSION}.tar.gz
 
-	# Modify nginx source code. Mix nginx info
-	echo "Start modify nginx name and version info."
+	# Change Nginx Version Header
+	echo "Start Change Nginx Version Header"
 	# modify nginx.h to mix version
 	sed -ri "s/#define\s+NGINX_VERSION\s+\"${NGINX_VERSION}\"/#define NGINX_VERSION      \"${MIX_NGINX_VERSION}\"/g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/core/nginx.h
 	sed -ri "s/#define\s+NGINX_VER\s+\"nginx\/\" NGINX_VERSION/#define NGINX_VER          \"${MIX_NGINX_NAME}\/\" NGINX_VERSION /g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/core/nginx.h
@@ -296,6 +296,16 @@ certbot(){
 	echo -e "$GREEN Nginx SSL cert config finished ! $NO_COLOR"
 	return 0
 }
+
+
+protect(){
+	# https://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html
+	# 
+	apt-get install fail2ban
+	
+	
+}
+
 
 case $1 in
 compile)
