@@ -7,15 +7,22 @@
 # https://docs.gxchain.org/zh/guide/testnet.html
 
 #set -x
-# config startup parameters
+# gxchain user
 CMD_USER=gxchainuser
+# port config
 RPC_ENDPOINT="127.0.0.1:28090"
 P2P_ENDPOINT="0.0.0.0:9999"
 SEED_NODES='["testnet.gxchain.org:6789"]'
+# workspace config
 WORKSPACE_PATH=/mydata
 GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
 DATA_DIR=$WORKSPACE_PATH/testnet_node
 PROGRAMS_DIR=$WORKSPACE_PATH/programs
+
+# witness config
+WITNESS_ID="1.6.1"
+PUBLICK_KEY="GXC6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
+PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
@@ -61,6 +68,10 @@ gen_config(){
 	sed -ri "s/#\s+p2p-endpoint\s+=/p2p-endpoint=${P2P_ENDPOINT}/g;" $DATA_DIR/config.ini
 	sed -ri "s/#\s+seed-nodes\s+=/seed-nodes=${SEED_NODES}/g;" $DATA_DIR/config.ini
 	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint=${RPC_ENDPOINT}/g;" $DATA_DIR/config.ini
+	#sed -ri "s/#\s+genesis\-json\s+=/genesis\-json=${GENESIS_FILE_PATH}/g;" $DATA_DIR/config.ini
+	sed -ri "s/#\s+witness-id\s+=/witness-id=\"${WITNESS_ID}\"/g;" $DATA_DIR/config.ini
+	sed -ri "s/GXC6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV/${PUBLICK_KEY}/g;" $DATA_DIR/config.ini
+	sed -ri "s/5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3/${PRIVATE_KEY}/g;" $DATA_DIR/config.ini
 
 	echo -e "$GREEN Generate config.ini Finished. $NO_COLOR"
 
@@ -102,7 +113,7 @@ stop() {
 	   let count=$count+1;
 	  done
 	else
-	  echo "GXChain witness node not running \n"
+	  echo -n -e "GXChain witness node not running \n"
 	fi
 	return 0
 }
@@ -131,9 +142,9 @@ status)
   pid=$(witness_node_pid)
   if [ -n "$pid" ]
   then
-    echo "GXChain witness node is running with pid: $pid\n"
+    echo -n -e "GXChain witness node is running with pid: $pid\n"
   else
-    echo "GXChain witness node is not running\n"
+    echo -n -e "GXChain witness node is not running\n"
   fi
 ;;
 esac
