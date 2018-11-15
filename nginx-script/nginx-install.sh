@@ -43,15 +43,15 @@ compile(){
 	
 	echo "Install dependencies"
 	apt-get update && apt-get upgrade -y
-	sudo apt autoremove
+	apt-get autoremove
 
 	# Install dependencies
 	# 
 	# * checkinstall: package the .deb
 	# * libpcre3, libpcre3-dev: required for HTTP rewrite module
 	# * zlib1g zlib1g-dbg zlib1g-dev: required for HTTP gzip module
-	# apt-get install openssl libssl-dev libperl-dev libpcre3 libpcre3-dev zlib1g zlib1g-dbg zlib1g-dev libxslt1-dev libxml2-dev
-	apt-get install checkinstall build-essential libgeoip-dev uuid-dev libgd2-xpm-dev libgoogle-perftools-dev
+	# apt-get install openssl libssl-dev libperl-dev libpcre3 libpcre3-dev zlib1g zlib1g-dbg zlib1g-dev libxslt1-dev libxml2-dev libgd2-xpm-dev
+	apt-get install checkinstall build-essential libgeoip-dev uuid-dev libgd-dev libgoogle-perftools-dev
 
 	# create build home
 	if [ ! -d ${BUILD_HOME} ]; then
@@ -117,14 +117,6 @@ compile(){
 	sed -ri "s/#define\s+NGINX_VER\s+\"nginx\/\" NGINX_VERSION/#define NGINX_VER          \"${MIX_NGINX_NAME}\/\" NGINX_VERSION /g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/core/nginx.h
 	# modify ngx_http_header_filter_module.c to mix name
 	sed -ri "s/static\s+u_char\s+ngx_http_server_string\[\]\s+=\s+\"Server: nginx\" CRLF;/static u_char ngx_http_server_string\[\] = \"Server: ${MIX_NGINX_NAME}\" CRLF;/g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/http/ngx_http_header_filter_module.c
-
-	echo "Start change nginx conf"
-	rm -rf ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf/*
-	cp -rp ${NGINX_SCRIPT_HOME}/nginx-conf/* ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf/
-	mv ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf/html/* ../html/
-	
-	chmod -R 644 ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf
-	chmod -R 644 ${BUILD_HOME}/nginx-${NGINX_VERSION}/html
 
 	# Configure nginx.
 	# 
@@ -215,6 +207,15 @@ compile(){
 install(){
 	# Install the package.
 	dpkg -i $BUILD_HOME/nginx-$NGINX_VERSION/nginx_$NGINX_VERSION-1_amd64.deb
+	if [ ! -d '/var/log/nginx' ]; then
+		mkdir -p /var/log/nginx
+	fi
+	if [ ! -d '/var/cache/nginx' ]; then
+		mkdir -p /var/cache/nginx
+	fi
+	if [ ! -d '/usr/lib/nginx/modules' ]; then
+		mkdir -p /usr/lib/nginx/modules
+	fi
 	echo -e "$GREEN Nginx install finished ! $NO_COLOR"
 	return 0
 }
@@ -250,12 +251,7 @@ config(){
 	    echo -e "$GREEN Create nginx user finished ! $NO_COLOR"
 	fi
 	# clean default config files
-	if [ ! -d "$NGINX_HOME/default.d/" ]; then
-		mkdir -p $NGINX_HOME/default.d/
-	fi
-	mv $NGINX_HOME/*.default $NGINX_HOME/default.d/
-	mv $NGINX_HOME/nginx.conf $NGINX_HOME/default.d/
-	mv $NGINX_HOME/html $NGINX_HOME/default.d/
+	rm -rf $NGINX_HOME/*
 	echo -e "$GREEN Nginx default config files clean finished ! $NO_COLOR"
 	
 	# config nginx
@@ -268,8 +264,12 @@ config(){
 
 	# config systemctl nginx.service
 	chmod 644 $NGINX_SCRIPT_HOME/nginx.service 
-	cp $NGINX_SCRIPT_HOME/nginx.service /lib/systemd/system/
+	if [ -f /lib/systemd/system/nginx.service ]; then
+		systemctl unmask nginx.service
+		rm -rf /lib/systemd/system/nginx.service
+	fi
 
+	cp $NGINX_SCRIPT_HOME/nginx.service /lib/systemd/system/
 	systemctl enable nginx
 
 	# auto startup on server boot

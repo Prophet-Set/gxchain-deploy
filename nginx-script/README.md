@@ -6,8 +6,10 @@
 
 对于比原生的安装方式，我们的脚本有以下几点优势：
 
+-  nginx版本为mainline最新版本
+-  默认提供已经优化过的配置文件，例如限流处理
+
 - 增加了 [incubator-pagespeed-ngx](https://github.com/apache/incubator-pagespeed-ngx) 、[ngx_cache_purge](https://github.com/FRiCKLE/ngx_cache_purge) 等有有用的Nginx module，有助于提升站点的性能。
-- 提供了已经优化过的 `.conf` 配置文件，例如限流处理。
 - 提供SSL证书的部署以及SSL证书的自动更新。
 - 通过fail2ban提供DDos防护处理。
 
