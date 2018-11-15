@@ -9,10 +9,12 @@
 #set -x
 # gxchain user
 CMD_USER=gxchainuser
+
 # port config
 RPC_ENDPOINT="127.0.0.1:28090"
 P2P_ENDPOINT="0.0.0.0:9999"
 SEED_NODES='["testnet.gxchain.org:6789"]'
+
 # workspace config
 WORKSPACE_PATH=/mydata
 GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
@@ -65,9 +67,9 @@ gen_config(){
 	# backup config.ini
 	cp $DATA_DIR/config.ini $DATA_DIR/config.ini.bak
 
-	sed -ri "s/#\s+p2p-endpoint\s+=/p2p-endpoint=${P2P_ENDPOINT}/g;" $DATA_DIR/config.ini
+	sed -ri "s/#\s+p2p-endpoint\s+=/p2p-endpoint=\"${P2P_ENDPOINT}\"/g;" $DATA_DIR/config.ini
 	sed -ri "s/#\s+seed-nodes\s+=/seed-nodes=${SEED_NODES}/g;" $DATA_DIR/config.ini
-	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint=${RPC_ENDPOINT}/g;" $DATA_DIR/config.ini
+	sed -ri "s/#\s+rpc-endpoint\s+=/rpc-endpoint=\"${RPC_ENDPOINT}\"/g;" $DATA_DIR/config.ini
 	#sed -ri "s/#\s+genesis\-json\s+=/genesis\-json=${GENESIS_FILE_PATH}/g;" $DATA_DIR/config.ini
 	sed -ri "s/#\s+witness-id\s+=/witness-id=\"${WITNESS_ID}\"/g;" $DATA_DIR/config.ini
 	sed -ri "s/GXC6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV/${PUBLICK_KEY}/g;" $DATA_DIR/config.ini
