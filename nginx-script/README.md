@@ -159,7 +159,7 @@ Nginx SSL cert config finished !
 
 ## DDos防御
 
-对于Nginx 的DDos防御配置，只能起到缓解攻击的作用，并不能妒忌DDos攻击。
+对于Nginx 的DDos防御配置，只能起到缓解攻击的作用，并不能完全杜绝DDos攻击。
 
 ### NGINX 部分
 
@@ -234,3 +234,9 @@ findtime 600 秒内如果有超过 maxretry 10 次匹配到则禁止连接 banti
 ## 问题
 
 - 如果服务器是在国内，在执行nginx编译的过程中，可能会发生有部分github上的tar包下载超时的情况，鉴于这种情况请直接安装我们已经编译好的`.deb`包。
+
+
+
+## 参考
+
+-  https://gist.github.com/denji/8359866

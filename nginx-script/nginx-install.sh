@@ -118,6 +118,14 @@ compile(){
 	# modify ngx_http_header_filter_module.c to mix name
 	sed -ri "s/static\s+u_char\s+ngx_http_server_string\[\]\s+=\s+\"Server: nginx\" CRLF;/static u_char ngx_http_server_string\[\] = \"Server: ${MIX_NGINX_NAME}\" CRLF;/g;" ${BUILD_HOME}/nginx-${NGINX_VERSION}/src/http/ngx_http_header_filter_module.c
 
+	echo "Start change nginx conf"
+	rm -rf ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf/*
+	cp -rp ${NGINX_SCRIPT_HOME}/nginx-conf/* ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf/
+	mv ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf/html/* ../html/
+	
+	chmod -R 644 ${BUILD_HOME}/nginx-${NGINX_VERSION}/conf
+	chmod -R 644 ${BUILD_HOME}/nginx-${NGINX_VERSION}/html
+
 	# Configure nginx.
 	# 
 	# http://nginx.org/en/docs/configure.html
@@ -223,6 +231,8 @@ uninstall(){
 	rm -rf /var/run/nginx*
 	rm -rf /var/cache/nginx
 	rm -rf /usr/lib/nginx
+	rm -rf /lib/systemd/system/nginx.service
+	rm -rf /usr/share/nginx
 
 	# uninstall .deb package
 	dpkg -l "nginx" &> /dev/null
@@ -249,7 +259,7 @@ config(){
 	echo -e "$GREEN Nginx default config files clean finished ! $NO_COLOR"
 	
 	# config nginx
-	cp -rp $NGINX_SCRIPT_HOME/nginx_conf/* $NGINX_HOME
+	cp -rp $NGINX_SCRIPT_HOME/nginx-conf/* $NGINX_HOME
 	# set nginx file permission
 	chmod -R 644 $NGINX_HOME
 	chmod 755 $NGINX_HOME/html
@@ -370,11 +380,3 @@ mitigation_ddos)
 ;;  
 esac
 exit 0
-
-
-
-
-
-
-
-
