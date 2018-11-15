@@ -118,7 +118,7 @@ Nginx config files set finished !
 Created symlink from /etc/systemd/system/multi-user.target.wants/nginx.service to /lib/systemd/system/nginx.service.
 ```
 
-在 `/etc/nginx/sites-enabled` 目录下会生成一个样例配置文件：`example.com.conf`，你可以据此模板创建自己的域名站点。
+在 `/etc/nginx/sites-enabled` 目录下会提供四种样例配置文件：`http.com.conf`、`https.com.conf`、`php.com.conf`、`static.com.conf`，你可以依据这些模板创建自己的站点配置。
 
 验证Nginx配置
 
