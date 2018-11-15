@@ -1,8 +1,10 @@
 # 公信链测试节点部署脚本
 
-## 部署脚本说明
+[TOC]
 
-> 官方文档：https://docs.gxchain.org/zh/guide/testnet.html
+
+
+## 测试链安装
 
 ### 下载脚本
 
@@ -27,7 +29,7 @@ $ chmod +x gxchain_test_script.sh
 
 2. 查看服务器防火墙以及云服务器的安全规则配置（例如阿里云的ECS的安全规则配置），确保对`rpc`和`p2p`端口开放。
 
-### 安装测试链
+### 部署安装
 
 执行安装命令，用以下载公信链最新测试版本：
 
@@ -88,9 +90,7 @@ $ ./gxchain_test_script.sh sync_block
 
 
 
-## config.ini
-
-### 初始化配置
+### 生成config.ini
 
 公信链启动后，会在 `testnet_node` 目录下生成 `config.ini` 配置文件，用于公信链运行参数的配置。使用配置文件管理启动参数优于以命令行的方式管理启动参数。
 
@@ -102,7 +102,7 @@ $ ./gxchain_test_script.sh gen_config
 
 
 
-## 公信链管理
+### 公信链管理
 
 **开机自启动配置**
 
@@ -172,9 +172,25 @@ $ ./gxchain_test_script.sh restart
 
 
 
+## 见证人配置
+
+
+
+
+
+
+
+
+
+
+
 ## 常见问题
 
 - 公信链启动之后，没有开始同步区块，请确保防火墙对RPC与P2P端口开放。
 
 
+
+## 参考资料
+
+- https://docs.gxchain.org/zh/guide/testnet.html
 
