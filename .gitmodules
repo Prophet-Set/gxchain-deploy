@@ -1,0 +1,3 @@
+[submodule "nginx-script"]
+	path = nginx-script
+	url = https://github.com/wangweiX/nginx-script
