@@ -36,11 +36,6 @@ clean_iptables() {
   iptables -P OUTPUT ACCEPT
   iptables -P FORWARD DROP
 
-  # DROP and close everything
-  $IPT -P INPUT DROP
-  $IPT -P OUTPUT DROP
-  $IPT -P FORWARD DROP
-
   iptables --flush        # Flush all rules, but keep policies
   iptables -t nat --flush	# Flush NAT table as well
   iptables --delete-chain
