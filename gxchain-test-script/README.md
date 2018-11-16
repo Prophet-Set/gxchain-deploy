@@ -24,10 +24,12 @@ $ chmod +x gxchain_test_script.sh
 #set -x
 # gxchain user
 CMD_USER=gxchainuser
+
 # port config
 RPC_ENDPOINT="127.0.0.1:28090"
 P2P_ENDPOINT="0.0.0.0:9999"
 SEED_NODES='["testnet.gxchain.org:6789"]'
+
 # workspace config
 WORKSPACE_PATH=/mydata
 GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
@@ -85,7 +87,7 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 
 ## 部署安装
 
-执行安装命令，用以下载公信链最新测试版本：
+执行安装命令，下载安装公信链最新测试版本：
 
 ```powershell
 $ ./gxchain_test_script.sh install

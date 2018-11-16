@@ -5,6 +5,7 @@
 #
 # https://help.ubuntu.com/community/UFW
 # https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
+# https://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html
 # 
 ################################################
 version_num=20181010
@@ -15,6 +16,11 @@ NO_COLOR="\033[0m"
 # define interfaces IP
 MY_ETH0_IP=$(ifconfig eth0 | grep inet | awk '{print $2}' | awk -F ":" '{print $2}')
 MY_ETH0_IP_SEG="${MY_ETH0_IP%.*}.0/24"
+
+### Interfaces ###
+PUB_IF=$MY_ETH0_IP   # public interface
+LO_IF="lo"           # loopback
+VPN_IF="eth1"        # vpn / private net
 
 backup_rules() {
   echo "Saving iptables rules: "
@@ -30,6 +36,11 @@ clean_iptables() {
   iptables -P OUTPUT ACCEPT
   iptables -P FORWARD DROP
 
+  # DROP and close everything
+  $IPT -P INPUT DROP
+  $IPT -P OUTPUT DROP
+  $IPT -P FORWARD DROP
+
   iptables --flush        # Flush all rules, but keep policies
   iptables -t nat --flush	# Flush NAT table as well
   iptables --delete-chain
@@ -39,7 +50,9 @@ clean_iptables() {
 
 input_rules() {
   echo -en "Creating rules for allowed INPUT traffic: $RED\n"
+  # Unlimited lo access
   iptables -A INPUT -i lo -j ACCEPT
+  # Unlimited vpn / pnet access
   if ifconfig eth1 &> /dev/null;then
 	  iptables -A INPUT -i eth0 -j ACCEPT
   else
@@ -75,8 +88,9 @@ input_rules() {
 
 output_rules() {
   echo -en "Creating rules for allowed OUTPUT traffic: $RED\n"
-  # Local traffic allowed accept al on lo interface
+  # Unlimited lo access
   iptables -A OUTPUT -o lo -j ACCEPT
+  # Unlimited vpn / pnet access
   if ifconfig eth1 &> /dev/null;then
 	  iptables -A OUTPUT -o eth0 -j ACCEPT
   else

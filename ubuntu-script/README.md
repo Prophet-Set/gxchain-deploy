@@ -132,39 +132,39 @@ MY_DATA_DEV='vda1'
 
 一般我们登录生产机器，会通过跳板机去登录，我们需要在跳板机上生成SSH公私钥，用于登录生产机器
 
-1. 登录跳板机，生成ssh key，可以修改后面的备注remark。
+登录跳板机，生成ssh key，可以修改后面的备注remark。
 
-   ```powershell
-   $ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_aws_$(date +%Y-%m-%d) -C "remark"
+```powershell
+$ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_aws_$(date +%Y-%m-%d) -C "remark"
+```
+
+安装ssh public key，将上一步生成的ssh public key安装到指定的生产机上。
+
+> 替换`.pub`文件名、`user`和`remote-server-ip`
+
+```powershell
+$ ssh-copy-id -i id_rsa_aws_2015-03-04.pub user@remote-server-ip
+```
+
+使用新生成的ssh key 登录生产机，并再次优化sshd_config配置，强制关闭密码登录，强制开启pubkey登录
+1. 使用ssh key登录，例如：
+
+   ```shell
+   $ ssh -i ssh_private_file -p 41837 gxchainuser@101.71.23.9
    ```
 
-2. 安装ssh public key，将上一步生成的ssh public key安装到指定的生产机上。
+2. 优化`sshd_config`配置，强制关闭密码登录，强制开启pubkey登录，单独执行下面的脚本：
 
-   > 替换`.pub`文件名、`user`和`remote-server-ip`
-
-   ```powershell
-   $ ssh-copy-id -i id_rsa_aws_2015-03-04.pub user@remote-server-ip
+   ```shell
+   sshd_pwd_auth_tunning(){
+       sed -ri 's/#PasswordAuthentication\s+yes/PasswordAuthentication\tno/g;' /etc/ssh/sshd_config
+       if ! grep 'AuthenticationMethods publickey' /etc/ssh/sshd_config >/dev/null;then echo "AuthenticationMethods publickey" >> /etc/ssh/sshd_config;fi
+   }
+   
+   sshd_pwd_auth_tunning
+   
+   service sshd restart
    ```
-
-3. 使用新生成的ssh key 登录生产机，并再次优化sshd_config配置，强制关闭密码登录，强制开启pubkey登录
-   1. 使用ssh key登录，例如：
-
-      ```shell
-      $ ssh -i ssh_private_file -p 41837 gxchainuser@101.71.23.9
-      ```
-
-   2. 优化`sshd_config`配置，强制关闭密码登录，强制开启pubkey登录，单独执行下面的脚本：
-
-      ```shell
-      sshd_pwd_auth_tunning(){
-          sed -ri 's/#PasswordAuthentication\s+yes/PasswordAuthentication\tno/g;' /etc/ssh/sshd_config
-          if ! grep 'AuthenticationMethods publickey' /etc/ssh/sshd_config >/dev/null;then echo "AuthenticationMethods publickey" >> /etc/ssh/sshd_config;fi
-      }
-      
-      sshd_pwd_auth_tunning
-      
-      service sshd restart
-      ```
 
 ### 防火墙设置
 
