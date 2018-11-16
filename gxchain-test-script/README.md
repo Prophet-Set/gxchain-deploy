@@ -93,7 +93,7 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 $ ./gxchain_test_script.sh install
 ```
 
-关于公信链依赖配置的安装，已在执行Ubuntu优化脚本 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh) 时所安装，若未执行过 [ubuntu_optimize.sh](https://github.com/gxcdac/gxchain-script/blob/master/ubuntu-script/ubuntu_optimize.sh)  脚本，则需要单独执行依赖安装：
+关于公信链依赖配置的安装，已在执行Ubuntu优化脚本 [ubuntu_optimize.sh](https://github.com/wangweiX/linux-script) 时所安装，若未执行过 [ubuntu_optimize.sh](https://github.com/wangweiX/linux-script)  脚本，则需要单独执行依赖安装：
 
 ```powershell
 $ sudo apt-get install ntp
