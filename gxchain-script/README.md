@@ -7,9 +7,9 @@
 ## 下载脚本
 
 ```powershell
-$ wget https://raw.githubusercontent.com/gxcdac/gxchain-/master/gxchain-test-script/gxchain_test_script.sh
+$ wget https://raw.githubusercontent.com/gxcdac/gxchain-deploy/master/gxchain-script/gxchain-test.sh
 
-$ chmod +x gxchain_test_script.sh
+$ chmod +x gxchain-test.sh
 ```
 
 
@@ -88,7 +88,7 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 执行安装命令，下载安装公信链最新测试版本：
 
 ```powershell
-$ ./gxchain_test_script.sh install
+$ ./gxchain-test.sh install
 ```
 
 ### 同步区块
@@ -96,7 +96,7 @@ $ ./gxchain_test_script.sh install
 启动测试链，开始从种子节点同步区块
 
 ```powershell
-$ ./gxchain_test_script.sh sync_block
+$ ./gxchain-test.sh sync_block
 ```
 
 查看区块同步日志 `testnet_node/logs/witness.log` ，等待区块同步完成。
@@ -140,7 +140,7 @@ $ ./gxchain_test_script.sh sync_block
 使用如下命令，可以将脚本中的参数配置写入到 `config.ini` 配置文件中
 
 ```powershell
-$ ./gxchain_test_script.sh gen_config
+$ ./gxchain-test.sh gen_config
 ```
 
 
@@ -152,7 +152,7 @@ $ ./gxchain_test_script.sh gen_config
 将如下内容，添加到  `/etc/rc.local` 配置末尾，具体路劲以实际情况为准
 
 ```shell
-/bin/sh /mydata/gxchain_test_script.sh start
+/bin/sh /mydata/gxchain-test.sh start
 ```
 
 > 注意：要放到  `exist 0` 指令之前。
@@ -160,13 +160,13 @@ $ ./gxchain_test_script.sh gen_config
 **查看公信链状态**
 
 ```powershell
-$ ./gxchain_test_script.sh status
+$ ./gxchain-test.sh status
 ```
 
 **启动公信链**
 
 ```powershell
-$ ./gxchain_test_script.sh start
+$ ./gxchain-test.sh start
 ```
 
 日志输出：
@@ -202,7 +202,7 @@ $ ./gxchain_test_script.sh start
 **停止公信链**
 
 ```powershell
-$ ./gxchain_test_script.sh stop
+$ ./gxchain-test.sh stop
 ```
 
 日志输出：
@@ -221,7 +221,7 @@ $ ./gxchain_test_script.sh stop
 **重启公信链**
 
 ```powershell
-$ ./gxchain_test_script.sh restart
+$ ./gxchain-test.sh restart
 ```
 
 
