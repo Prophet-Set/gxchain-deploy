@@ -6,10 +6,8 @@
 
 ## 下载脚本
 
-> [gxchain_test_script.sh](https://github.com/gxcdac/gxchain-script/tree/master/gxchain-test-script/gxchain_test_script.sh)
-
 ```powershell
-$ wget https://raw.githubusercontent.com/gxcdac/gxchain-script/master/gxchain-test-script/gxchain_test_script.sh
+$ wget https://raw.githubusercontent.com/gxcdac/gxchain-/master/gxchain-test-script/gxchain_test_script.sh
 
 $ chmod +x gxchain_test_script.sh
 ```
