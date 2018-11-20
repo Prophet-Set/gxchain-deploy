@@ -228,6 +228,78 @@ $ ./gxchain_test_script.sh restart
 
 
 
+## Nginx反向代理RPC & P2P端口
+
+ 通过前面的步骤，我们成功部署的公信链，接下来要通过Nginx的反向代理来对外提供GXChain RPC与P2P端口的访问。
+
+### RPC & P2P
+
+确保GXChain RPC 与  P2P 端口配置如下：
+
+```
+RPC_ENDPOINT="127.0.0.1:28090"
+P2P_ENDPOINT="0.0.0.0:9999"
+```
+
+### Nginx配置
+
+- 部署Nginx。参考：[Nginx优化配置](https://github.com/wangweiX/nginx-script)
+
+- 配置GXChain对外提供RPC与P2P服务的域名。例如：
+  - **RPC**：`https://test.api.gxcdac.io`
+  - **P2P**： `https://test.fullnode.gxcdac.io:443`
+
+> 建议配置全网最大存活数量的端口 80、443 或 22，这样可以有效抬高攻击者定位成本。
+
+
+
+### 验证
+
+**RPC端口验证**
+
+调用节点的get_dynamic_global_properties API查看最新区块号
+
+```
+curl -d '{ "jsonrpc": "2.0", "method": "call", "params": [0, "get_dynamic_global_properties", []], "id": 1 }' -H "Content-Type: application/json" -X POST https://test.api.gxcdac.io
+```
+
+返回如下信息：
+
+```json
+{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "result": {
+        "accounts_registered_this_interval": 0,
+        "current_aslot": 9680901,
+        "current_witness": "1.6.3",
+        "dynamic_flags": 0,
+        "head_block_id": "00898348edef224e4985aa29ed9826dea0572830",
+        "head_block_number": 9012040,
+        "id": "2.1.0",
+        "last_budget_time": "2018-11-20T04:40:00",
+        "last_irreversible_block_num": 9012031,
+        "next_maintenance_time": "2018-11-20T04:50:00",
+        "recent_slots_filled": "340282366920938463463374607431768211455",
+        "recently_missed_count": 0,
+        "time": "2018-11-20T04:41:39",
+        "witness_budget": 17000000
+    }
+}
+```
+
+
+
+**P2P端口验证**
+
+```shell
+$ telnet test.fullnode.gxcdac.io 443
+
+Connected to test.fullnode.gxcdac.io.
+```
+
+
+
 ## 常见问题
 
 - 公信链启动之后，没有开始同步区块，请确保防火墙对RPC与P2P端口开放。
