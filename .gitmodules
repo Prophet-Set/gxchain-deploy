@@ -1,0 +1,6 @@
+[submodule "linux-script"]
+	path = linux-script
+	url = git@github.com:wangweiX/linux-script.git
+[submodule "nginx-script"]
+	path = nginx-script
+	url = git@github.com:wangweiX/nginx-script.git
