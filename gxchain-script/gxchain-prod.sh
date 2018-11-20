@@ -33,6 +33,13 @@ NO_COLOR="\033[0m"
 install(){
 	echo "Starting GXChain install ... "
 	
+	sudo apt-get install ntp
+    sudo apt-get update
+    sudo apt-get install software-properties-common
+    sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    sudo apt-get update
+    sudo apt-get install libstdc++-7-dev
+    
 	# enter workspace
 	cd $WORKSPACE_PATH
 

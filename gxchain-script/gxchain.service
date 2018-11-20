@@ -1,0 +1,15 @@
+[Unit]
+Description=GXChain Blockchain Service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/mydata/gxchain-test.sh start
+ExecStop=/mydata/gxchain-test.sh stop
+ExecRestart=/mydata/gxchain-test.sh restart
+ExecStatus=/mydata/gxchain-test.sh status
+TimeoutStopSec=5
+KillMode=mixed
+
+[Install]
+WantedBy=default.target

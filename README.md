@@ -1,4 +1,4 @@
-# 公信链部署相关脚本
+# 公信节点部署指南
 
 1. Ubuntu优化：[linux-script](https://github.com/wangweiX/linux-script)
 2. 防火墙配置：[ubuntu-firewall](https://github.com/wangweiX/linux-script/#%E9%98%B2%E7%81%AB%E5%A2%99%E8%AE%BE%E7%BD%AE)
