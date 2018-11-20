@@ -93,17 +93,6 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 $ ./gxchain_test_script.sh install
 ```
 
-关于公信链依赖配置的安装，已在执行Ubuntu优化脚本 [ubuntu_optimize.sh](https://github.com/wangweiX/linux-script) 时所安装，若未执行过 [ubuntu_optimize.sh](https://github.com/wangweiX/linux-script)  脚本，则需要单独执行依赖安装：
-
-```powershell
-$ sudo apt-get install ntp
-$ apt-get update
-$ apt-get install software-properties-common
-$ add-apt-repository ppa:ubuntu-toolchain-r/test
-$ apt-get update
-$ apt-get install libstdc++-7-dev
-```
-
 ### 同步区块
 
 启动测试链，开始从种子节点同步区块

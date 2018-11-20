@@ -1,6 +1,0 @@
-[submodule "nginx-script"]
-	path = nginx-script
-	url = https://github.com/wangweiX/nginx-script
-[submodule "linux-script"]
-	path = linux-script
-	url = https://github.com/wangweiX/linux-script
