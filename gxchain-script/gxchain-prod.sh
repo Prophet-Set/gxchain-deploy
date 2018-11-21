@@ -59,6 +59,8 @@ install(){
 sync_block() {
 	echo "Starting GXChain sync block ... "
 	
+	cd $WORKSPACE_PATH
+
 	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' -w "\"$WITNESS_ID\"" --private-key '["\"$PUBLICK_KEY\"","\"$PRIVATE_KEY\""]' "
 
 	/bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
@@ -106,7 +108,11 @@ start() {
   else
     # Start run witness node
     echo "Starting witness node ... "
+
+    cd $WORKSPACE_PATH
+
     CMD="$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR'"
+    
     /bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
   fi
   sleep 1

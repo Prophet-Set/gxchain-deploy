@@ -63,6 +63,8 @@ install(){
 sync_block() {
 	echo "Starting GXChain sync block ... "
 	
+	cd $WORKSPACE_PATH
+
 	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' --rpc-endpoint='$RPC_ENDPOINT' --p2p-endpoint='$P2P_ENDPOINT' --seed-nodes='$SEED_NODES' --genesis-json $GENESIS_FILE_PATH"
 
 	/bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
@@ -110,6 +112,9 @@ start() {
   else
     # Start run witness node
     echo "Starting witness node ... "
+
+    cd $WORKSPACE_PATH
+
     CMD="$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR' --genesis-json $GENESIS_FILE_PATH"
     /bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
   fi
