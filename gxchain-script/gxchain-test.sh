@@ -34,11 +34,11 @@ install(){
 	echo "Starting GXChain install ... "
 	
 	sudo apt-get install ntp
-    sudo apt-get update
-    sudo apt-get install software-properties-common
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-    sudo apt-get update
-    sudo apt-get install libstdc++-7-dev
+	sudo apt-get update
+        sudo apt-get install software-properties-common
+	sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+	sudo apt-get install libstdc++-7-dev
 
 	# enter workspace
 	cd $WORKSPACE_PATH
@@ -85,11 +85,11 @@ gen_config(){
 	echo -e "$GREEN Generate config.ini Finished. $NO_COLOR"
 
 	grep '/mydata/gxchain-test.sh' /etc/rc.local &> /dev/null
-    if [ $? != 0 ] ; then
-      sed -i '/exit\s0/d' /etc/rc.local
-      echo -e '/bin/sh /mydata/gxchain-test.sh start\nexit 0' >> /etc/rc.local
-    fi
-    echo -e "$GREEN GXChain config start on boot Finished. $NO_COLOR"
+	if [ $? != 0 ] ; then
+           sed -i '/exit\s0/d' /etc/rc.local
+           echo -e '/bin/sh /mydata/gxchain-test.sh start\nexit 0' >> /etc/rc.local
+        fi
+	echo -e "$GREEN GXChain config start on boot Finished. $NO_COLOR"
 
 	return 0
 }
