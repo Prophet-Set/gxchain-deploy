@@ -321,9 +321,18 @@ Connected to test.fullnode.gxcdac.io.
 
 
 
+## 注意事项
+
+- 建议将公信链部署安装到单独的数据盘上。比如，新建`/mydata`目录，单独挂载一块数据盘，用于公信链部署。
+- 公信链管理脚本 `gxchain-test.sh` 或 `gxchain-prod.sh` 放置的路径，不要轻易改变，以免导致公信链服务失效(systemctl start|stop|restart|status  gxchain )，建议放置在公信链部署目录下。例如：`/mydata`目录。
+
+
+
 ## 常见问题
 
 - 公信链启动之后，没有开始同步区块，请确保防火墙对RPC与P2P端口开放。
+
+
 
 
 
