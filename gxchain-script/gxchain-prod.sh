@@ -99,7 +99,7 @@ start() {
   else
     # Start run witness node
     echo "Starting witness node ... "
-    CMD="$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR' --genesis-json $GENESIS_FILE_PATH"
+    CMD="$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR'"
     /bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
   fi
   sleep 1
