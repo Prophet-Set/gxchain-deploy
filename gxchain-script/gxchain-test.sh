@@ -84,6 +84,13 @@ gen_config(){
 
 	echo -e "$GREEN Generate config.ini Finished. $NO_COLOR"
 
+	grep '/mydata/gxchain-test.sh' /etc/rc.local &> /dev/null
+    if [ $? != 0 ] ; then
+      sed -i '/exit\s0/d' /etc/rc.local
+      echo -e '/bin/sh /mydata/gxchain-test.sh start\nexit 0' >> /etc/rc.local
+    fi
+    echo -e "$GREEN GXChain config start on boot Finished. $NO_COLOR"
+
 	return 0
 }
 
