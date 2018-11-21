@@ -34,11 +34,11 @@ install(){
 	echo "Starting GXChain install ... "
 	
 	sudo apt-get install ntp
-	sudo apt-get update
-        sudo apt-get install software-properties-common
-	sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-        sudo apt-get update
-	sudo apt-get install libstdc++-7-dev
+	apt-get update && apt-get upgrade -y
+    apt-get install software-properties-common
+	add-apt-repository ppa:ubuntu-toolchain-r/test
+    apt-get update && apt-get upgrade -y
+	apt-get install libstdc++-7-dev
 
 	# enter workspace
 	cd $WORKSPACE_PATH
