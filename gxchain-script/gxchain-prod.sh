@@ -59,6 +59,7 @@ install(){
 sync_block() {
 	echo "Starting GXChain sync block ... "
 	
+	# Make sure object_database is in the mydata directory
 	cd $WORKSPACE_PATH
 
 	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' -w "\"$WITNESS_ID\"" --private-key '["\"$PUBLICK_KEY\"","\"$PRIVATE_KEY\""]' "
@@ -109,6 +110,7 @@ start() {
     # Start run witness node
     echo "Starting witness node ... "
 
+    # Make sure object_database is in the mydata directory
     cd $WORKSPACE_PATH
 
     CMD="$PROGRAMS_DIR/witness_node/witness_node --data-dir='$DATA_DIR'"
