@@ -159,13 +159,25 @@ $ ./gxchain-test.sh gen_config
 
 **开机自启动配置**
 
-将如下内容，添加到  `/etc/rc.local` 配置末尾，具体路劲以实际情况为准
+该部分内容的配置，已在脚本中配置，与`./gxchain-test.sh gen_config`一起执行。脚本如下：
 
 ```shell
-/bin/sh /mydata/gxchain-test.sh start
+gen_config(){
+	
+	...
+
+	grep '/mydata/gxchain-test.sh' /etc/rc.local &> /dev/null
+    if [ $? != 0 ] ; then
+      sed -i '/exit\s0/d' /etc/rc.local
+      echo -e '/bin/sh /mydata/gxchain-test.sh start\nexit 0' >> /etc/rc.local
+    fi
+    echo -e "$GREEN GXChain config start on boot Finished. $NO_COLOR"
+
+	return 0
+}
 ```
 
-> 注意：要放到  `exist 0` 指令之前。
+
 
 **查看公信链状态**
 
