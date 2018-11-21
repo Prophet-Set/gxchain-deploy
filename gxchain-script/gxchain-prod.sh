@@ -4,7 +4,7 @@
 # @author https://wangwei.one"
 # @date   20181108"
 #--------------------------------------------------------------------"
-# https://docs.gxchain.org/zh/guide/testnet.html
+# https://docs.gxchain.org/zh/guide/witness.html
 
 #set -x
 # gxchain user
