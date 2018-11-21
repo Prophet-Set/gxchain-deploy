@@ -52,6 +52,9 @@ install(){
 	# download testnet genesis.json
 	wget http://gxb-package.oss-cn-hangzhou.aliyuncs.com/gxb-core/genesis/testnet-genesis.json -O $GENESIS_FILE_PATH
 
+	chown -R $CMD_USER:$CMD_USER $PROGRAMS_DIR
+	chown $CMD_USER:$CMD_USER $GENESIS_FILE_PATH
+
 	echo -e "$GREEN GXChain install Finished. $NO_COLOR"
 
 	return 0

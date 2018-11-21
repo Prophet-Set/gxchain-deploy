@@ -49,6 +49,8 @@ install(){
 	# delete tar.gz file
 	rm -rf gxb_ubuntu_*.*.*.tar.gz
 
+	chown -R $CMD_USER:$CMD_USER $PROGRAMS_DIR
+
 	echo -e "$GREEN GXChain install Finished. $NO_COLOR"
 
 	return 0
@@ -57,7 +59,7 @@ install(){
 sync_block() {
 	echo "Starting GXChain sync block ... "
 	
-	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' --rpc-endpoint='$RPC_ENDPOINT' "
+	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' -w "\"$WITNESS_ID\"" --private-key '["\"$PUBLICK_KEY\"","\"$PRIVATE_KEY\""]' "
 
 	/bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
 

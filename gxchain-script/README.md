@@ -98,7 +98,7 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 执行安装命令，下载安装公信链最新测试版本：
 
 ```powershell
-$ ./gxchain-test.sh install
+$ sudo ./gxchain-test.sh install
 ```
 
 ### 同步区块
