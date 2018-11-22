@@ -17,7 +17,7 @@ P2P_ENDPOINT="0.0.0.0:9999"
 
 # workspace config
 WORKSPACE_PATH=/mydata
-GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
+#GENESIS_FILE_PATH=$WORKSPACE_PATH/genesis.json
 DATA_DIR=$WORKSPACE_PATH/trusted_node
 PROGRAMS_DIR=$WORKSPACE_PATH/programs
 
@@ -57,17 +57,20 @@ install(){
 }
 
 sync_block() {
-	echo "Starting GXChain sync block ... "
-	
-	# Make sure object_database is in the mydata directory
-	cd $WORKSPACE_PATH
+	pid=$(witness_node_pid)
+	if [ -n "$pid" ]; then
+	   echo "GXChain is syncing block (pid: $pid)"
+	else
+	   echo "Starting GXChain sync block ... "
+	   # Make sure object_database is in the mydata directory
+	   cd $WORKSPACE_PATH
 
-	CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' -w "\"$WITNESS_ID\"" --private-key '["\"$PUBLICK_KEY\"","\"$PRIVATE_KEY\""]' "
+	   CMD="$WORKSPACE_PATH/programs/witness_node/witness_node --data-dir='$DATA_DIR' -w "\"$WITNESS_ID\"" --private-key '["\"$PUBLICK_KEY\"","\"$PRIVATE_KEY\""]' "
 
-	/bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
+	   /bin/su - -c "setsid $CMD >/dev/null 2>&1 < /dev/null &" $CMD_USER
 
-	echo "Check block sync progress. Usage: tail -f $WORKSPACE_PATH/trusted_node/logs/witness.log"
-
+	   echo -e "$GREEN Check block sync progress. $NO_COLOR Usage: tail -f $WORKSPACE_PATH/trusted_node/logs/witness.log"
+    fi
 	return 0
 }
 
