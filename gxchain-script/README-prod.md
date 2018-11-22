@@ -8,7 +8,7 @@
 
 我们以最基础的架构为例：
 
-![GXChain Prod Node](https://img.i7years.com/gxcdac/GXChain Prod Node.png)
+![GXChain Prod Node](https://img.i7years.com/gxcdac/GXChain%20Prod%20Node.png)
 
 > -  [GXChain API服务器搭建](https://docs.gxchain.org/zh/guide/api_server.html)
 > - [公信节点部署](https://docs.gxchain.org/zh/guide/witness.html)
