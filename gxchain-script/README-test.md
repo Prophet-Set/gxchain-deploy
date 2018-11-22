@@ -1,6 +1,6 @@
-# 公信链测试节点部署
+# GXChain测试节点部署
 
-使用我们的脚本可以快速便捷地部署公信链测试节点，也能够有效地管理公信链节点，省去敲击一大串复杂的命令行的工作。
+使用我们的脚本可以快速便捷地部署GXChain测试节点，也能够有效地管理GXChain节点，省去敲击一大串复杂的命令行的工作。
 
 
 
@@ -66,7 +66,7 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 
 ##### 运行用户配置
 
-- `CMD_USER`：设置公信链运行的用户（非root）。例如：`CMD_USER=gxchainuser`
+- `CMD_USER`：设置GXChain运行的用户（非root）。例如：`CMD_USER=gxchainuser`
 
 ##### 运行端口配置
 
@@ -88,7 +88,7 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 
 ##### 工作目录配置
 
-- `WORKSPACE_PATH`：公信链运行目录。例如：`WORKSPACE_PATH=/mydata`
+- `WORKSPACE_PATH`：GXChain运行目录。例如：`WORKSPACE_PATH=/mydata`
 
 ##### 见证人配置
 
@@ -107,7 +107,7 @@ PRIVATE_KEY="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 
 ## 部署安装
 
-执行安装命令，下载安装公信链最新测试版本：
+执行安装命令，下载安装GXChain最新测试版本：
 
 ```powershell
 $ sudo ./gxchain-test.sh install
@@ -157,7 +157,7 @@ $ ./gxchain-test.sh sync_block
 
 ### 生成config.ini
 
-公信链启动后，会在 `testnet_node` 目录下生成 `config.ini` 配置文件，用于公信链运行参数的配置。使用配置文件管理启动参数优于以命令行的方式管理启动参数，也便于后期公信链的管理。
+GXChain启动后，会在 `testnet_node` 目录下生成 `config.ini` 配置文件，用于GXChain运行参数的配置。使用配置文件管理启动参数优于以命令行的方式管理启动参数，也便于后期GXChain的管理。
 
 使用如下命令，可以将脚本中的参数配置写入到 `config.ini` 配置文件中
 
@@ -167,7 +167,7 @@ $ ./gxchain-test.sh gen_config
 
 
 
-## 公信链管理
+## GXChain管理
 
 **开机自启动配置**
 
@@ -192,13 +192,13 @@ gen_config(){
 
 
 
-**查看公信链状态**
+**查看GXChain状态**
 
 ```powershell
 $ ./gxchain-test.sh status
 ```
 
-**启动公信链**
+**启动GXChain**
 
 ```powershell
 $ ./gxchain-test.sh start
@@ -234,7 +234,7 @@ $ ./gxchain-test.sh start
 
 ```
 
-**停止公信链**
+**停止GXChain**
 
 ```powershell
 $ ./gxchain-test.sh stop
@@ -253,7 +253,7 @@ $ ./gxchain-test.sh stop
 2018-11-12T03:35:53        th_a:?unnamed?                close ] Rewinding from 8803779 to 8803771			db_management.cpp:205
 ```
 
-**重启公信链**
+**重启GXChain**
 
 ```powershell
 $ ./gxchain-test.sh restart
@@ -263,7 +263,7 @@ $ ./gxchain-test.sh restart
 
 ## Nginx反向代理RPC & P2P端口
 
- 通过前面的步骤，我们成功部署的公信链，接下来要通过Nginx的反向代理来对外提供GXChain RPC与P2P端口的访问。
+ 通过前面的步骤，我们成功部署的GXChain，接下来要通过Nginx的反向代理来对外提供GXChain RPC与P2P端口的访问。
 
 ### RPC & P2P
 
@@ -337,7 +337,7 @@ Connected to test.fullnode.gxcdac.io.
 
 > 测试环境不强求配置
 
-公信链节点配置，需要将公信账户的公私钥配置到`config.ini`文件中，一旦服务器被黑入，极有可能出现公信账号被盗的风险，存在非常大的安全隐患。
+GXChain节点配置，需要将公信账户的公私钥配置到`config.ini`文件中，一旦服务器被黑入，极有可能出现公信账号被盗的风险，存在非常大的安全隐患。
 
 为了避免这种风险，我们可以采取以下两种措施来避免此种风险：
 
@@ -348,14 +348,14 @@ Connected to test.fullnode.gxcdac.io.
 
 ## 注意事项
 
-- 建议将公信链部署安装到单独的数据盘上。比如，新建`/mydata`目录，单独挂载一块数据盘，用于公信链部署。
-- 公信链管理脚本 `gxchain-test.sh` 放置的路径，不要轻易改变，以免导致公信链开机自启动失效，建议放置在公信链部署目录下。例如：`/mydata`目录。
+- 建议将GXChain部署安装到单独的数据盘上。比如，新建`/mydata`目录，单独挂载一块数据盘，用于GXChain部署。
+- GXChain管理脚本 `gxchain-test.sh` 放置的路径，不要轻易改变，以免导致GXChain开机自启动失效，建议放置在GXChain部署目录下。例如：`/mydata`目录。
 
 
 
 ## 常见问题
 
-- 公信链启动之后，没有开始同步区块，请确保防火墙对RPC与P2P端口开放。
+- GXChain启动之后，没有开始同步区块，请确保防火墙对RPC与P2P端口开放。
 
 
 
