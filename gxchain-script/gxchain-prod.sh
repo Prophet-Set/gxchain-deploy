@@ -13,7 +13,7 @@ CMD_USER=gxchainuser
 # port config
 RPC_ENDPOINT="127.0.0.1:28090"
 P2P_ENDPOINT="0.0.0.0:9999"
-#SEED_NODES='["testnet.gxchain.org:6789"]'
+#SEED_NODES='["your_seed_ip:6789"]'
 
 # workspace config
 WORKSPACE_PATH=/mydata

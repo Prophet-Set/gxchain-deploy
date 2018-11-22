@@ -6,17 +6,15 @@
 
 ## 架构
 
-![GXChain Test Node](https://img.i7years.com/gxcdac/GXChain%20Test%20Node.png)
-
 测试节点通常只需要部署一台服务器即可，这一台服务器同时承担了三种角色：
+
+![GXChain Test Node](https://img.i7years.com/gxcdac/GXChain%20Test%20Node.png)
 
 - RPC服务器：对外向API用户提供RPC访问接口服务。
 - Seed服务器：向网络中的其他节点提供P2P端口服务，以供区块同步使用。
 - BP服务器：用于生产区块服务。
 
 
-
-## 硬件配置
 
 测试节点的服务器配置如下：
 
@@ -125,8 +123,6 @@ $ ./gxchain-test.sh sync_block
 
 查看区块同步日志 `testnet_node/logs/witness.log` ，等待区块同步完成。
 
-当区块编号以  10000 递增时，表示区块正在同步。当区块编号以  1 递增时，表示区块同步完成，公信链整个测试链的数据约在1.5G左右，一个小时之内就可以同步完成。
-
 ```
 
 2018-11-11T12:58:54        th_a:?unnamed?       reset_p2p_node ] Adding seed node 106.14.180.117:6789			application.cpp:152
@@ -154,6 +150,8 @@ $ ./gxchain-test.sh sync_block
 ...
 
 ```
+
+当区块编号以  10000 递增时，表示正在同步历史区块。当区块编号以  1 递增时，表示历史区块同步完成，开始同步最新区块，整个测试链的数据约在1.5G左右，一个小时之内就可以同步完成。
 
 
 
@@ -337,7 +335,7 @@ Connected to test.fullnode.gxcdac.io.
 
 ## 账户安全
 
-> 此部分内容，生产环境务必执行，测试环境不强求。
+> 测试环境不强求配置
 
 公信链节点配置，需要将公信账户的公私钥配置到`config.ini`文件中，一旦服务器被黑入，极有可能出现公信账号被盗的风险，存在非常大的安全隐患。
 
@@ -351,7 +349,7 @@ Connected to test.fullnode.gxcdac.io.
 ## 注意事项
 
 - 建议将公信链部署安装到单独的数据盘上。比如，新建`/mydata`目录，单独挂载一块数据盘，用于公信链部署。
-- 公信链管理脚本 `gxchain-test.sh` 或 `gxchain-prod.sh` 放置的路径，不要轻易改变，以免导致公信链开机自启动失效，建议放置在公信链部署目录下。例如：`/mydata`目录。
+- 公信链管理脚本 `gxchain-test.sh` 放置的路径，不要轻易改变，以免导致公信链开机自启动失效，建议放置在公信链部署目录下。例如：`/mydata`目录。
 
 
 
