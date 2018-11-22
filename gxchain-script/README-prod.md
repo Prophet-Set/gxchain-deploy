@@ -137,7 +137,7 @@ $ ./gxchain-prod.sh sync_block
 
 查看区块同步日志 `trusted_node/logs/witness.log` ，等待区块同步完成。
 
-![gxchain-sync-block-log](https://img.i7years.com/gxcdac/gxchain-sync-block-log.png)
+![gxchain-sync-block-log](https://img.i7years.com/gxcdac/gxchain-sync-block-log1.png)
 
 生产区块每2~3min同步一次。当区块编号以  10000 递增时，表示正在同步历史区块。当区块编号以  1 递增时，表示历史区块同步完成，开始同步最新区块。生产数据量比较大，需要30+H才能同步完。
 
