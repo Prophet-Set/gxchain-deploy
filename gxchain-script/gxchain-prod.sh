@@ -31,8 +31,7 @@ GREEN="\033[0;32m"
 NO_COLOR="\033[0m"
 
 install(){
-	echo "Starting GXChain install ... "
-	
+    echo "Starting GXChain install ... "
 	sudo apt-get install ntp
     apt-get update && apt-get upgrade -y
     apt-get install software-properties-common
@@ -144,36 +143,60 @@ stop() {
 	return 0
 }
 
+status(){
+    pid=$(witness_node_pid)
+    if [ -n "$pid" ]
+    then
+       echo -n -e "GXChain witness node is running with pid: $pid\n"
+    else
+       echo -n -e "GXChain witness node is not running\n"
+    fi
+}
+
+usage="Usage: ./$(basename "$0") [command]
+
+command:
+    h            show help info.
+    install      install gxchain program.
+    sync_block   start to synchronize block from other seed nodes.
+    gen_config   generate gxchain config file: config.ini 
+    start        start gxchain.
+    stop         stop gxchain.
+    restart      restart gxchain.
+    status       show gxchain running status. "
+
 case $1 in
-install)
-  install
-;;
-sync_block)
-  sync_block
-;;
-gen_config)
-  gen_config
-;;  
-start)
-  start
-;;
-stop)
-  stop
-;;
-restart)
-  stop
-  start
-;;
-status)
-  pid=$(witness_node_pid)
-  if [ -n "$pid" ]
-  then
-    echo -n -e "GXChain witness node is running with pid: $pid\n"
-  else
-    echo -n -e "GXChain witness node is not running\n"
-  fi
-;;
+    h|help)
+      echo "$usage"
+      exit
+      ;;
+    install)
+      install
+      ;;
+    sync_block)
+      sync_block
+      ;;
+    gen_config)
+      gen_config
+      ;;  
+    start)
+      start
+      ;;
+    stop)
+      stop
+      ;;
+    restart)
+      stop
+      start
+      ;;
+    status)
+      status
+      ;;
+    *)
+      printf "illegal command: %s\n" "$1" >&2
+      echo "$usage" >&2
+      exit 1
+      ;;
 esac
 exit 0
-
 
