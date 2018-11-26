@@ -4,3 +4,6 @@
 [submodule "linux-script"]
 	path = linux-script
 	url = git@github.com:wangweiX/linux-script.git
+[submodule "gxchain-monitor"]
+	path = gxchain-monitor
+	url = git@github.com:gxcdac/gxchain-monitor.git
